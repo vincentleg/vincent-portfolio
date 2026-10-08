@@ -14,6 +14,12 @@ export function ScrollMotion() {
           gsap.fromTo('.flagship-stage', { rotateX: 12, scale: .86, y: 70 }, { rotateX: 0, scale: 1, y: 0, ease: 'none', scrollTrigger: { trigger: '.flagship', start: 'top 75%', end: 'center 48%', scrub: .8 } });
           gsap.to('.flagship-watermark', { xPercent: -12, ease: 'none', scrollTrigger: { trigger: '.flagship', start: 'top bottom', end: 'bottom top', scrub: 1 } });
         }
+        if (document.querySelector('.notebook-plane')) {
+          const wide = window.innerWidth >= 700;
+          if (wide) gsap.fromTo('.notebook-plane', { rotateX: 30, rotateZ: -4, y: 90 }, { rotateX: 12, rotateZ: 0, y: 0, ease: 'none', scrollTrigger: { trigger: '.notebook', start: 'top 80%', end: 'center 50%', scrub: .8 } });
+          gsap.utils.toArray<HTMLElement>('.note-slot').forEach((el, i) => { const depth = Number(el.dataset.depth || .5); gsap.from(el, { opacity: 0, scale: .94, duration: .9, delay: i * .08, ease: 'power2.out', scrollTrigger: { trigger: '.notebook-stage', start: 'top 85%', once: true } }); if (wide) gsap.fromTo(el, { y: 110 * depth, z: -140 * depth }, { y: -45 * depth, z: 0, ease: 'none', scrollTrigger: { trigger: '.notebook-stage', start: 'top bottom', end: 'bottom 25%', scrub: 1 } }); });
+          gsap.fromTo('.notebook-masthead', { xPercent: 2.5, opacity: .4 }, { xPercent: -2.5, opacity: 1, ease: 'none', scrollTrigger: { trigger: '.notebook', start: 'top bottom', end: 'center top', scrub: 1 } });
+        }
       }); cleanup = () => mm.revert();
     });
     return () => { cancelled = true; cleanup?.(); };

@@ -6,6 +6,9 @@ export type Project = {
   problem: string; decision: string; approach: string; next: string;
   flow: { title: string; text: string }[];
   ledger: { capability: string; status: string; evidence: string; href?: string }[];
+  kind?: 'build' | 'media';
+  /** Optional copy overrides for case-study headings that assume a software build. */
+  copy?: { problemTitle: [string, string]; approachLabel: string; approachTitle: [string, string]; methodTitle: string; stackLabel: string; workflowTitle: string; nextTitle: [string, string] };
 };
 const github = 'https://github.com/vincentleg';
 export const projects: Project[] = [
@@ -87,7 +90,31 @@ export const projects: Project[] = [
       { capability: 'Airline booking, money and calendar', status: 'Sandboxed', evidence: 'No real airline purchase, bank transaction or calendar OAuth occurs.', href: `${github}/steward#what-is-real` },
       { capability: 'Connection-center integrations', status: 'Planned', evidence: 'The supplied screenshot says no public integrations are available yet.' }
     ]
+  },
+  {
+    slug: 'notebook-from-the-valley', name: 'Notebook from the Valley', number: '05', category: 'Independent media & writing', status: 'Live publication', accent: '#e6cf9a', kind: 'media',
+    hook: 'What sits underneath the announcements.',
+    summary: 'An independent technology publication documenting the Silicon Valley ecosystem: AI, infrastructure, companies, startups, conferences, and firsthand experience of living and working in California.',
+    image: '/media/notebook-home.webp', imageAlt: 'Notebook from the Valley homepage with the founding article “These are my notes from the Valley.”',
+    caption: 'Publication homepage · Unedited capture of notebookfromthevalley.com, October 8, 2026.',
+    gallery: [{ src: '/media/notebook-essay.webp', alt: 'The founding essay of Notebook from the Valley, “These are my notes from the Valley.”', caption: 'Founding essay · The publication’s statement of purpose, written by Vincent Leguide.' }],
+    links: [{ label: 'Read the publication', href: 'https://notebookfromthevalley.com' }, { label: 'Read the founding essay', href: 'https://notebookfromthevalley.com/these-are-my-notes-from-the-valley/' }],
+    stack: ['Founder & author', 'Long-form essays', 'Event coverage', 'WordPress'],
+    problem: 'Technology coverage tends to focus on products, valuations, funding announcements, and personalities. Much of what is shaping the transformation — the infrastructure, the institutions, the conversations after a panel — remains difficult to see from outside Silicon Valley.',
+    decision: 'Write from inside the ecosystem, in the first person. Treat conferences, company visits, university talks, and community events as primary sources, and connect them back to the physical constraints behind computing: energy, hardware, and infrastructure.',
+    approach: 'Since moving from France to California in 2025, Vincent has published long-form essays that move between company profiles (NVIDIA, Y Combinator, Andreessen Horowitz), people (Fei-Fei Li, Sam Altman), firsthand reporting (Apple Park, Waymo, Garry’s List), and analysis of AI infrastructure, energy, and physical AI. The writing draws on five years in sustainable AI infrastructure.',
+    next: 'The notebook continues as an ongoing record of the ecosystem. Readership figures, distribution partners, and editorial credentials are not presented here because they have not been independently verified for this portfolio.',
+    flow: [{ title: 'Attend', text: 'Conferences, company events, university talks, startup gatherings and community meetups across the Bay Area and the United States.' }, { title: 'Listen', text: 'The most useful details rarely come from keynote slides. They come from conversations after a panel.' }, { title: 'Connect', text: 'Relate announcements to what sits underneath them: infrastructure, energy, capital, policy and talent.' }, { title: 'Publish', text: 'Long-form, first-person essays that document the ecosystem as it is being built.' }],
+    ledger: [
+      { capability: 'Independent publication, live', status: 'Observed', evidence: 'notebookfromthevalley.com returned HTTP 200 and was captured on October 8, 2026.', href: 'https://notebookfromthevalley.com' },
+      { capability: 'Founded and written by Vincent Leguide', status: 'Observed', evidence: 'The founding essay describes the publication in the first person; the site’s author account belongs to Vincent Leguide.', href: 'https://notebookfromthevalley.com/these-are-my-notes-from-the-valley/' },
+      { capability: 'Published archive', status: 'Observed', evidence: '25 articles dated January 3 to June 5, 2026 in the public feed. One additional post containing placeholder text is excluded.' },
+      { capability: 'Readership and audience size', status: 'Not disclosed', evidence: 'No subscriber, traffic or readership numbers are claimed in this portfolio.' },
+      { capability: 'Awards, press credentials and partnerships', status: 'Not claimed', evidence: 'None are presented here. Articles describe events attended, not formal affiliations.' }
+    ],
+    copy: { problemTitle: ['The story behind', 'the headlines.'], approachLabel: 'THE EDITORIAL DECISION', approachTitle: ['Report from', 'inside the ecosystem.'], methodTitle: 'Editorial approach', stackLabel: 'ROLE & FORMAT', workflowTitle: 'From the room to the page.', nextTitle: ['Keep listening.', 'Keep writing.'] }
   }
 ];
+export const builds = projects.filter(p => p.kind !== 'media');
 export const projectBySlug = (slug: string) => projects.find(project => project.slug === slug);
 export const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');

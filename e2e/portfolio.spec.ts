@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-const routes = ['/', '/work', '/work/orqo', '/work/intent-firewall', '/work/handshake', '/work/steward', '/about'];
+const routes = ['/', '/work', '/work/orqo', '/work/intent-firewall', '/work/handshake', '/work/steward', '/work/notebook-from-the-valley', '/about'];
 test('all routes, real media, metadata, and responsive containment', async ({page}) => {
   const errors:string[] = []; page.on('pageerror',error => errors.push(error.message));
   for (const route of routes) {
@@ -29,9 +29,20 @@ test('navigation, project constellation, contact and keyboard workflow', async (
 test('reduced motion is static and accessible', async ({page}) => {
   await page.emulateMedia({reducedMotion:'reduce'}); await page.goto('/');
   await expect(page.locator('.static-orbit')).toBeVisible(); await expect(page.locator('.hero canvas')).toHaveCount(0);
-  for(const route of ['/', '/work/orqo','/about']) {
+  for(const route of ['/', '/work/orqo', '/work/notebook-from-the-valley', '/about']) {
     await page.goto(route); const results = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze(); expect(results.violations).toEqual([]);
   }
+});
+test('Notebook from the Valley: homepage section, constellation and case study', async ({page}) => {
+  await page.goto('/'); const section = page.locator('#notebook'); await section.scrollIntoViewIfNeeded();
+  await expect(section.getByRole('heading',{name:/Notes from inside/})).toBeVisible();
+  const cards = section.locator('.note-card'); await expect(cards).toHaveCount(6);
+  for (const card of await cards.all()) expect(await card.getAttribute('href')).toMatch(/^https:\/\/notebookfromthevalley\.com\/[a-z0-9-]+\/$/);
+  await expect(page.locator('.star-node')).toHaveCount(5); await expect(page.locator('.star-node.star-media')).toHaveCount(1);
+  await page.locator('.star-node').filter({hasText:'Notebook from the Valley'}).focus(); await expect(page.locator('.constellation-detail h3')).toHaveText('Notebook from the Valley');
+  await page.goto('/work/notebook-from-the-valley'); await expect(page.getByRole('heading',{level:1})).toHaveText('Notebook from the Valley');
+  await expect(page.locator('.archive-list li')).toHaveCount(25); await expect(page.getByRole('heading',{name:'Verification Ledger.'})).toBeVisible();
+  await expect(page.getByRole('link',{name:/Read the publication/})).toHaveAttribute('href','https://notebookfromthevalley.com');
 });
 test('WebGL scene and pause control', async ({page}) => {
   await page.goto('/'); await expect(page.locator('.hero canvas')).toBeVisible({timeout:20000});
@@ -45,7 +56,7 @@ test('WebGL unavailable preserves the hero and navigation', async ({page}) => {
   await page.getByRole('link',{name:'Explore my universe'}).click(); await expect(page).toHaveURL(/#orqo/);
 });
 test('social cards, sitemap and missing route', async ({request,page}) => {
-  for(const path of ['/opengraph-image','/work/orqo/opengraph-image']) { const r = await request.get(path); expect(r.ok()).toBeTruthy(); expect(r.headers()['content-type']).toContain('image/png'); }
+  for(const path of ['/opengraph-image','/work/orqo/opengraph-image','/work/notebook-from-the-valley/opengraph-image']) { const r = await request.get(path); expect(r.ok()).toBeTruthy(); expect(r.headers()['content-type']).toContain('image/png'); }
   expect((await request.get('/sitemap.xml')).ok()).toBeTruthy();
   const response = await page.goto('/work/not-a-project'); expect(response?.status()).toBe(404); await expect(page.getByRole('link',{name:'Return to the projects'})).toBeVisible();
 });

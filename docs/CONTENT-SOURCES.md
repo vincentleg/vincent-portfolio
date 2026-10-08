@@ -12,3 +12,11 @@ Reviewed October 8, 2026. Project descriptions were checked against these primar
 The product repositories' test suites were not run. “Reported working” and “documented implementation” deliberately distinguish source statements from independent runtime verification. No emails, provider writes, restaurant orders, real bookings or money movements were performed for this portfolio review.
 
 Each case study has a Verification Ledger in `src/lib/projects.ts`; preserve these evidence distinctions when updating copy. Project names, status, media, links, workflow and ledgers are data-driven. The constellation computes its node positions from that same array, so adding a project does not require adding a hard-coded node.
+
+## Notebook from the Valley (added October 8, 2026)
+
+- Official URL verified: https://notebookfromthevalley.com (HTTP 200; WordPress author account belongs to Vincent Leguide; founding essay written in the first person).
+- `src/lib/notebook.ts`: 25 article titles, dates and opening lines copied verbatim from the site's public WordPress feed and checked programmatically against it. One post containing placeholder (lorem ipsum) text is excluded.
+- `public/media/notebook-home.webp`, `notebook-essay.webp`: unedited screenshots of the live publication, captured with `scripts/capture-notebook.mjs`.
+- Article feature images are not reused: several depict third parties or may be third-party photography.
+- Not claimed: readership, subscriber counts, awards, press credentials, partnerships.
