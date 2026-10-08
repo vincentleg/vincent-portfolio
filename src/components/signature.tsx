@@ -56,9 +56,20 @@ function Notebook() {
   </svg>;
 }
 
+// Fallback for projects without a bespoke diagram: an orbit around a core, labelled with the project's group.
+function Generic({ label }: { label: string }) {
+  return <svg viewBox="0 0 400 300">
+    <g className="sig-grid"><path d="M0 150H400M200 0V300"/></g>
+    <ellipse className="sig-side" cx="200" cy="150" rx="150" ry="62"/><ellipse className="sig-side sig-a" cx="200" cy="150" rx="104" ry="104" opacity=".4"/>
+    <g className="sig-critic"><path d="M200 150 L200 46"/><circle cx="200" cy="46" r="4"/></g>
+    <circle className="sig-core" cx="200" cy="150" r="9"/>
+    <g className="sig-label"><T x={200} y={285} a="middle">{label.toUpperCase()}</T></g>
+  </svg>;
+}
+
 const map: Record<string, () => React.ReactElement> = { orqo: Orqo, 'intent-firewall': Intent, handshake: Handshake, steward: Steward, 'notebook-from-the-valley': Notebook };
 
-export function Signature({ slug, caption = true, className = '' }: { slug: string; caption?: boolean; className?: string }) {
-  const Diagram = map[slug]; if (!Diagram) return null;
-  return <figure className={`signature sig-${slug} ${className}`} aria-hidden="true"><Diagram/>{caption && <figcaption>CONCEPTUAL DIAGRAM · DOCUMENTED WORKFLOW</figcaption>}</figure>;
+export function Signature({ slug, caption = true, className = '', fallbackLabel = 'Project' }: { slug: string; caption?: boolean; className?: string; fallbackLabel?: string }) {
+  const Diagram = map[slug];
+  return <figure className={`signature sig-${slug} ${className}`} aria-hidden="true">{Diagram ? <Diagram/> : <Generic label={fallbackLabel}/>}{caption && <figcaption>CONCEPTUAL DIAGRAM · DOCUMENTED WORKFLOW</figcaption>}</figure>;
 }

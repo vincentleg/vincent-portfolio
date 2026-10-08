@@ -49,3 +49,13 @@ Use a new Vercel project for this repository. `vercel deploy` creates a preview;
 ## Updating projects
 
 Add a record to `projects`, including a screenshot, evidence, honest status and workflow. Work index, routes and constellation update from this source.
+
+## Adding a project
+
+Projects are fully data-driven. To add one:
+
+1. Append an entry to `entries` in `src/lib/projects.ts`. Required: `slug`, `name`, `category`, `group`, `date` (YYYY-MM), `status`, `accent`, `hook`, `summary`, case-study copy and a `ledger`. Optional: `featured` (homepage index, max 8), `related` (`[{ slug, reason }]` — the only edges the constellation draws), `image`/`imageAlt`/`caption`, `gallery`, `links` (`kind: 'demo' | 'repo' | 'publication'`).
+2. Put screenshots in `public/media/` and add their dimensions to `src/lib/media-dimensions.json`. Without an image, the project's signature diagram is used (a generic one unless a bespoke diagram exists in `src/components/signature.tsx`).
+3. Nothing else: numbering, routes, sitemap, social images, work filters, the orbital hero bodies and the constellation layout all derive from the data.
+
+Scale testing: `NEXT_PUBLIC_PORTFOLIO_FIXTURES=20 npm run build && NEXT_PUBLIC_PORTFOLIO_FIXTURES=20 npx playwright test e2e/scale.spec.ts`. Never set this variable in a deployed environment; rebuild without it before deploying.

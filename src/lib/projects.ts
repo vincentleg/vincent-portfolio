@@ -1,8 +1,21 @@
+import { fixtureProjects } from './fixtures';
+export type ProjectGroup = 'AI products & agents' | 'Media & writing' | 'Infrastructure';
+export type Relation = { slug: string; reason: string };
 export type Project = {
-  slug: string; name: string; number: string; category: string; status: string; accent: string;
-  hook: string; summary: string; image: string; imageAlt: string; caption: string;
+  slug: string; name: string; category: string; status: string; accent: string;
+  /** Broad family used for filtering and constellation clustering. */
+  group: ProjectGroup;
+  /** ISO year-month used for chronological ordering. */
+  date: string;
+  /** Shown in the homepage index. */
+  featured?: boolean;
+  /** Meaningful connections only; rendered as constellation edges (symmetric). */
+  related?: Relation[];
+  hook: string; summary: string;
+  /** Optional authentic visual. Without one, the project's signature diagram is shown. */
+  image?: string; imageAlt?: string; caption?: string;
   gallery: { src: string; alt: string; caption: string }[];
-  links: { label: string; href: string }[]; stack: string[];
+  links: { label: string; href: string; kind?: 'demo' | 'repo' | 'publication' }[]; stack: string[];
   problem: string; decision: string; approach: string; next: string;
   flow: { title: string; text: string }[];
   ledger: { capability: string; status: string; evidence: string; href?: string }[];
@@ -10,15 +23,16 @@ export type Project = {
   /** Optional copy overrides for case-study headings that assume a software build. */
   copy?: { problemTitle: [string, string]; approachLabel: string; approachTitle: [string, string]; methodTitle: string; stackLabel: string; workflowTitle: string; nextTitle: [string, string] };
 };
+export type NumberedProject = Project & { number: string };
 const github = 'https://github.com/vincentleg';
-export const projects: Project[] = [
+const entries: Project[] = [
   {
-    slug: 'orqo', name: 'ORQO', number: '01', category: 'Business intelligence', status: 'In development', accent: '#dba887',
+    slug: 'orqo', name: 'ORQO', group: 'AI products & agents', date: '2026-10', featured: true, related: [{ slug: 'handshake', reason: 'Turning a conversation into a concrete next step' }, { slug: 'notebook-from-the-valley', reason: 'Researching companies across the ecosystem' }], category: 'Business intelligence', status: 'In development', accent: '#dba887',
     hook: 'You meet the person. ORQO finds the business.',
     summary: 'A business-development system that researches companies, tests opportunities from both sides, and keeps evidence at the center of the conversation.',
     image: '/media/orqo-agents.webp', imageAlt: 'Authentic ORQO agent catalog showing management agents, specialists and planned capabilities in French.',
     caption: 'Agent catalog · Original product screenshot, cropped to remove account information. Availability labels describe the product UI, not independently verified integrations.',
-    gallery: [], links: [{ label: 'Explore the repository', href: `${github}/ORQO` }],
+    gallery: [], links: [{ label: 'Explore the repository', href: `${github}/ORQO`, kind: 'repo' }],
     stack: ['Next.js', 'TypeScript', 'Supabase', 'Deterministic engine'],
     problem: 'A promising conversation often ends with a contact record and no concrete next step. Understanding whether two companies can actually work together takes research, commercial context, and a clear view of what each side needs.',
     decision: 'Evaluate both sides of a relationship. ORQO tests concrete business structures and gives a critic the job of rejecting weak opportunities. A surviving idea carries evidence, assumptions, unknowns, risks, and a next step. Private consent comes before a shared business match.',
@@ -34,12 +48,12 @@ export const projects: Project[] = [
     ]
   },
   {
-    slug: 'intent-firewall', name: 'Intent Firewall', number: '02', category: 'Agent guardrails', status: 'Live demo · prototype', accent: '#b4cda3',
+    slug: 'intent-firewall', name: 'Intent Firewall', group: 'AI products & agents', date: '2026-10', featured: true, related: [{ slug: 'steward', reason: 'Policy stays authoritative over the model' }], category: 'Agent guardrails', status: 'Live demo · prototype', accent: '#b4cda3',
     hook: 'Same change. Different intent.',
     summary: 'A decision layer for agentic commerce: adapt a harmless order change, ask when intent is at risk, or hold when evidence is missing.',
     image: '/media/intent-overview.webp', imageAlt: 'Intent Firewall demo with a client meeting lunch order and merchant fulfillment workflow.', caption: 'Live-demo interface · Order facts are simulated; the project uses live model decisions when its provider is configured.',
     gallery: [{ src: '/media/intent-decision.webp', alt: 'Intent Firewall merchant console evaluates a fifteen-minute delivery delay for a client meeting.', caption: 'The same delay is judged against purpose, hard deadlines, budget and physical verification.' }],
-    links: [{ label: 'Open live demo', href: 'https://intent-firewall-hackathon.vercel.app' }, { label: 'Explore the repository', href: `${github}/intent-firewall-hackathon` }],
+    links: [{ label: 'Open live demo', href: 'https://intent-firewall-hackathon.vercel.app', kind: 'demo' }, { label: 'Explore the repository', href: `${github}/intent-firewall-hackathon`, kind: 'repo' }],
     stack: ['Next.js', 'TypeScript', 'ZooWork Instinct', 'Policy engine'],
     problem: 'Lunch arriving fifteen minutes late can be harmless for a casual team meal and unacceptable before a client meeting. An order alone does not tell a restaurant which promise matters. Asking about every change is noisy; automatically accepting every change is risky.',
     decision: 'Carry the customer’s purpose with the order. Let a model assess the proposed change, then apply deterministic rules that remain authoritative. Missing verification means hold; a missed hard deadline means ask. Automatic adaptation requires verified state and sufficient confidence.',
@@ -54,12 +68,12 @@ export const projects: Project[] = [
     ]
   },
   {
-    slug: 'handshake', name: 'Handshake', number: '03', category: 'Relationships & consent', status: 'Product prototype', accent: '#c9b8de',
+    slug: 'handshake', name: 'Handshake', group: 'AI products & agents', date: '2026-10', featured: true, related: [{ slug: 'steward', reason: 'Explicit permission before acting' }], category: 'Relationships & consent', status: 'Product prototype', accent: '#c9b8de',
     hook: 'The conversation ends. The promise stays.',
     summary: 'A relationship agent exploring how to capture open loops, ask for consent, and distinguish an attempted action from a verified outcome.',
     image: '/media/handshake-overview.webp', imageAlt: 'Handshake product preview organizes conversation follow-ups into Needs You, Handshake, Them and Time.', caption: 'Product preview · Demo conversation with Alex at Acme. Provider identifiers have been removed.',
     gallery: [{ src: '/media/handshake-loops.webp', alt: 'Handshake open-loop view showing an unverified meeting outcome and an introduction in the kept section.', caption: 'The interface distinguishes pending actions from claimed completion. Provider identifiers have been removed; screenshots alone do not prove external delivery.' }],
-    links: [{ label: 'Open product preview', href: 'https://handshake-six-murex.vercel.app' }], stack: ['Web prototype', 'Consent workflow', 'Outcome receipts'],
+    links: [{ label: 'Open product preview', href: 'https://handshake-six-murex.vercel.app', kind: 'demo' }], stack: ['Web prototype', 'Consent workflow', 'Outcome receipts'],
     problem: '“I’ll send the deck.” “Let me introduce you.” A useful conversation creates obligations that disappear into notes and inboxes. A reminder can tell you to act, but it cannot tell you whether the promise has actually been kept.',
     decision: 'Organize work by who has the next move: you, the agent, the other person, or time. Make permission explicit before an action. Preserve the distinction between sending a request and verifying the intended outcome.',
     approach: 'The supplied interface shows encounter capture, open-loop ownership, action authorization, and evidence-oriented status messages. One screenshot explicitly reports that a meeting outcome was not verified. The public landing page was reachable during review, but no provider writes or private account flows were exercised, and no public source repository was supplied.',
@@ -73,12 +87,12 @@ export const projects: Project[] = [
     ]
   },
   {
-    slug: 'steward', name: 'Steward', number: '04', category: 'Personal autonomy', status: 'Sandbox prototype', accent: '#9cbcca',
+    slug: 'steward', name: 'Steward', group: 'AI products & agents', date: '2026-10', featured: true, category: 'Personal autonomy', status: 'Sandbox prototype', accent: '#86aee0',
     hook: 'When plans break, protect what matters.',
     summary: 'A personal outcome-recovery prototype that compares alternatives, requests human approval, and checks whether the intended result was restored.',
     image: '/media/steward-world.webp', imageAlt: 'Steward synthetic-world interface showing decisions, resources and commitments.', caption: 'Synthetic world · Travel, money and commitments shown here are seeded scenario data.',
     gallery: [{ src: '/media/steward-connections.webp', alt: 'Steward connection center explicitly labels integrations as planned and unavailable.', caption: 'Connection center · A preview of planned capabilities. No public integrations are available through this screen.' }],
-    links: [{ label: 'Explore the repository', href: `${github}/steward` }], stack: ['Node.js', 'JavaScript', 'Signed approvals', 'AgentMail adapter'],
+    links: [{ label: 'Explore the repository', href: `${github}/steward`, kind: 'repo' }], stack: ['Node.js', 'JavaScript', 'Signed approvals', 'AgentMail adapter'],
     problem: 'A cancelled flight is more than a travel task. It threatens a meeting, a budget, and future plans. Choosing another flight without understanding those constraints can fix the itinerary while damaging the actual outcome.',
     decision: 'Model the outcome first, compare possible futures, and compress the tradeoffs into one human decision. After approval, allow only scoped tools and verify the result through receipts. Keep the agent’s reasoning separate from its authority to act.',
     approach: 'The repository documents an event-driven workflow with persistent runs, signed approval links, an authority policy, and allowlisted sandbox tools. AgentMail provides the configured email path; a local approval path works without it. Airline inventory, bookings, money movement, calendar actions, and counterparty negotiation remain sandboxed.',
@@ -92,13 +106,13 @@ export const projects: Project[] = [
     ]
   },
   {
-    slug: 'notebook-from-the-valley', name: 'Notebook from the Valley', number: '05', category: 'Independent media & writing', status: 'Live publication', accent: '#e6cf9a', kind: 'media',
+    slug: 'notebook-from-the-valley', name: 'Notebook from the Valley', group: 'Media & writing', date: '2026-01', featured: true, category: 'Independent media & writing', status: 'Live publication', accent: '#e6cf9a', kind: 'media',
     hook: 'What sits underneath the announcements.',
     summary: 'An independent technology publication documenting the Silicon Valley ecosystem: AI, infrastructure, companies, startups, conferences, and firsthand experience of living and working in California.',
     image: '/media/notebook-home.webp', imageAlt: 'Notebook from the Valley homepage with the founding article “These are my notes from the Valley.”',
     caption: 'Publication homepage · Unedited capture of notebookfromthevalley.com, October 8, 2026.',
     gallery: [{ src: '/media/notebook-essay.webp', alt: 'The founding essay of Notebook from the Valley, “These are my notes from the Valley.”', caption: 'Founding essay · The publication’s statement of purpose, written by Vincent Leguide.' }],
-    links: [{ label: 'Read the publication', href: 'https://notebookfromthevalley.com' }, { label: 'Read the founding essay', href: 'https://notebookfromthevalley.com/these-are-my-notes-from-the-valley/' }],
+    links: [{ label: 'Read the publication', href: 'https://notebookfromthevalley.com', kind: 'publication' }, { label: 'Read the founding essay', href: 'https://notebookfromthevalley.com/these-are-my-notes-from-the-valley/' }],
     stack: ['Long-form essays', 'Event coverage', 'Company & people profiles', 'WordPress'],
     problem: 'Technology coverage tends to focus on products, valuations, funding announcements, and personalities. Much of what is shaping the transformation — the infrastructure, the institutions, the conversations after a panel — remains difficult to see from outside Silicon Valley.',
     decision: 'Write from inside the ecosystem, in the first person. Treat conferences, company visits, university talks, and community events as primary sources, and connect them back to the physical constraints behind computing: energy, hardware, and infrastructure.',
@@ -115,7 +129,17 @@ export const projects: Project[] = [
     copy: { problemTitle: ['The story behind', 'the headlines.'], approachLabel: 'THE EDITORIAL DECISION', approachTitle: ['Report from', 'inside the ecosystem.'], methodTitle: 'Editorial approach', stackLabel: 'FORMAT', workflowTitle: 'From the room to the page.', nextTitle: ['Keep listening.', 'Keep writing.'] }
   }
 ];
-export const builds = projects.filter(p => p.kind !== 'media');
+// Test-only scale fixtures. NEXT_PUBLIC_PORTFOLIO_FIXTURES is never set in deployed environments.
+const fixtureTarget = Number(process.env.NEXT_PUBLIC_PORTFOLIO_FIXTURES || 0);
+const all = fixtureTarget > entries.length ? [...entries, ...fixtureProjects(fixtureTarget - entries.length)] : entries;
+/** Display order: as authored. Numbers are derived, never hand-maintained. */
+export const projects: NumberedProject[] = all.map((p, i) => ({ ...p, number: String(i + 1).padStart(2, '0') }));
+export const featuredProjects = projects.filter(p => p.featured).slice(0, 8);
+export const groups = [...new Set(projects.map(p => p.group))];
+export const byDate = (order: 'newest' | 'oldest' = 'newest') => [...projects].sort((a, b) => (order === 'newest' ? -1 : 1) * a.date.localeCompare(b.date) || a.number.localeCompare(b.number));
+/** Symmetric, de-duplicated relationship edges between existing projects. */
+export const relations = (() => { const seen = new Map<string, { a: string; b: string; reason: string }>(); for (const p of projects) for (const r of p.related ?? []) { if (!projects.some(q => q.slug === r.slug)) continue; const key = [p.slug, r.slug].sort().join('|'); if (!seen.has(key)) seen.set(key, { a: p.slug, b: r.slug, reason: r.reason }); } return [...seen.values()]; })();
+export const relationsOf = (slug: string) => relations.filter(r => r.a === slug || r.b === slug).map(r => ({ slug: r.a === slug ? r.b : r.a, reason: r.reason }));
 export const projectBySlug = (slug: string) => projects.find(project => project.slug === slug);
 // Production uses the public project domain; per-deployment URLs sit behind Vercel's deployment protection.
 const vercelHost = process.env.VERCEL_ENV === 'production' && process.env.VERCEL_PROJECT_PRODUCTION_URL ? process.env.VERCEL_PROJECT_PRODUCTION_URL : process.env.VERCEL_URL;
