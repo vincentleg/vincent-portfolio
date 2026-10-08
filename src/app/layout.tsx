@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import '@fontsource-variable/manrope';
 import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
 import './globals.css';
 import { Header, Footer } from '@/components/chrome';
 import { ScrollMotion } from '@/components/motion';

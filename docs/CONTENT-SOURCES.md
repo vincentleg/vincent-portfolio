@@ -20,3 +20,7 @@ Each case study has a Verification Ledger in `src/lib/projects.ts`; preserve the
 - `public/media/notebook-home.webp`, `notebook-essay.webp`: unedited screenshots of the live publication, captured with `scripts/capture-notebook.mjs`.
 - Article feature images are not reused: several depict third parties or may be third-party photography.
 - Not claimed: readership, subscriber counts, awards, press credentials, partnerships.
+
+## Project signature diagrams (added October 8, 2026)
+
+`src/components/signature.tsx` draws one conceptual SVG per project from that project's documented workflow (the `flow` steps and ledger in `src/lib/projects.ts`). Each is captioned "Conceptual diagram · documented workflow". They are illustrations, not product screenshots, and imply no additional runtime capability.

@@ -14,6 +14,8 @@ export function ScrollMotion() {
           gsap.fromTo('.flagship-stage', { rotateX: 12, scale: .86, y: 70 }, { rotateX: 0, scale: 1, y: 0, ease: 'none', scrollTrigger: { trigger: '.flagship', start: 'top 75%', end: 'center 48%', scrub: .8 } });
           gsap.to('.flagship-watermark', { xPercent: -12, ease: 'none', scrollTrigger: { trigger: '.flagship', start: 'top bottom', end: 'bottom top', scrub: 1 } });
         }
+        if (window.innerWidth >= 700) gsap.utils.toArray<HTMLElement>('[data-tilt]').forEach(el => gsap.fromTo(el, { rotateX: 14, scale: .9, y: 60, transformPerspective: 1600 }, { rotateX: 0, scale: 1, y: 0, ease: 'none', scrollTrigger: { trigger: el, start: 'top 95%', end: 'top 35%', scrub: .8 } }));
+        gsap.utils.toArray<HTMLElement>('.section-kicker').forEach(el => gsap.fromTo(el, { '--kicker': 0 }, { '--kicker': 1, duration: 1.4, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 92%', once: true } }));
         if (document.querySelector('.notebook-plane')) {
           const wide = window.innerWidth >= 700;
           if (wide) gsap.fromTo('.notebook-plane', { rotateX: 30, rotateZ: -4, y: 90 }, { rotateX: 12, rotateZ: 0, y: 0, ease: 'none', scrollTrigger: { trigger: '.notebook', start: 'top 80%', end: 'center 50%', scrub: .8 } });

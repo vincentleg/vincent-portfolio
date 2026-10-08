@@ -29,7 +29,7 @@ test('navigation, project constellation, contact and keyboard workflow', async (
 test('reduced motion is static and accessible', async ({page}) => {
   await page.emulateMedia({reducedMotion:'reduce'}); await page.goto('/');
   await expect(page.locator('.static-orbit')).toBeVisible(); await expect(page.locator('.hero canvas')).toHaveCount(0);
-  for(const route of ['/', '/work/orqo', '/work/notebook-from-the-valley', '/about']) {
+  for(const route of routes) {
     await page.goto(route); const results = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze(); expect(results.violations).toEqual([]);
   }
 });
@@ -43,6 +43,12 @@ test('Notebook from the Valley: homepage section, constellation and case study',
   await page.goto('/work/notebook-from-the-valley'); await expect(page.getByRole('heading',{level:1})).toHaveText('Notebook from the Valley');
   await expect(page.locator('.archive-list li')).toHaveCount(25); await expect(page.getByRole('heading',{name:'Verification Ledger.'})).toBeVisible();
   await expect(page.getByRole('link',{name:/Read the publication/})).toHaveAttribute('href','https://notebookfromthevalley.com');
+});
+test('each case study has its own signature diagram and fact strip', async ({page}) => {
+  for (const slug of ['orqo','intent-firewall','handshake','steward','notebook-from-the-valley']) {
+    await page.goto(`/work/${slug}`); await expect(page.locator(`.case-hero .sig-${slug} svg`)).toBeVisible();
+    await expect(page.locator('.case-spec > div')).toHaveCount(4);
+  }
 });
 test('WebGL scene and pause control', async ({page}) => {
   await page.goto('/'); await expect(page.locator('.hero canvas')).toBeVisible({timeout:20000});

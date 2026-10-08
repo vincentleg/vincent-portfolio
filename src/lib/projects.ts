@@ -99,7 +99,7 @@ export const projects: Project[] = [
     caption: 'Publication homepage · Unedited capture of notebookfromthevalley.com, October 8, 2026.',
     gallery: [{ src: '/media/notebook-essay.webp', alt: 'The founding essay of Notebook from the Valley, “These are my notes from the Valley.”', caption: 'Founding essay · The publication’s statement of purpose, written by Vincent Leguide.' }],
     links: [{ label: 'Read the publication', href: 'https://notebookfromthevalley.com' }, { label: 'Read the founding essay', href: 'https://notebookfromthevalley.com/these-are-my-notes-from-the-valley/' }],
-    stack: ['Founder & author', 'Long-form essays', 'Event coverage', 'WordPress'],
+    stack: ['Long-form essays', 'Event coverage', 'Company & people profiles', 'WordPress'],
     problem: 'Technology coverage tends to focus on products, valuations, funding announcements, and personalities. Much of what is shaping the transformation — the infrastructure, the institutions, the conversations after a panel — remains difficult to see from outside Silicon Valley.',
     decision: 'Write from inside the ecosystem, in the first person. Treat conferences, company visits, university talks, and community events as primary sources, and connect them back to the physical constraints behind computing: energy, hardware, and infrastructure.',
     approach: 'Since moving from France to California in 2025, Vincent has published long-form essays that move between company profiles (NVIDIA, Y Combinator, Andreessen Horowitz), people (Fei-Fei Li, Sam Altman), firsthand reporting (Apple Park, Waymo, Garry’s List), and analysis of AI infrastructure, energy, and physical AI. The writing draws on five years in sustainable AI infrastructure.',
@@ -112,7 +112,7 @@ export const projects: Project[] = [
       { capability: 'Readership and audience size', status: 'Not disclosed', evidence: 'No subscriber, traffic or readership numbers are claimed in this portfolio.' },
       { capability: 'Awards, press credentials and partnerships', status: 'Not claimed', evidence: 'None are presented here. Articles describe events attended, not formal affiliations.' }
     ],
-    copy: { problemTitle: ['The story behind', 'the headlines.'], approachLabel: 'THE EDITORIAL DECISION', approachTitle: ['Report from', 'inside the ecosystem.'], methodTitle: 'Editorial approach', stackLabel: 'ROLE & FORMAT', workflowTitle: 'From the room to the page.', nextTitle: ['Keep listening.', 'Keep writing.'] }
+    copy: { problemTitle: ['The story behind', 'the headlines.'], approachLabel: 'THE EDITORIAL DECISION', approachTitle: ['Report from', 'inside the ecosystem.'], methodTitle: 'Editorial approach', stackLabel: 'FORMAT', workflowTitle: 'From the room to the page.', nextTitle: ['Keep listening.', 'Keep writing.'] }
   }
 ];
 export const builds = projects.filter(p => p.kind !== 'media');
