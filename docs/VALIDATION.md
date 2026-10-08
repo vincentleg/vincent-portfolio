@@ -14,3 +14,5 @@ October 8, 2026.
 The sandboxed Turbopack build stalled during compilation. Webpack completed reliably; `npm run build` explicitly uses `next build --webpack`.
 
 Limits: automated accessibility checks do not replace human assistive-technology testing. No physical iOS device or Safari test was performed. Product integrations were assessed from primary documentation/screenshots, not by performing external writes. Email and LinkedIn remain omitted pending verified public contact details.
+
+Deployment check found that Vercel initialized the empty project with its “Other” framework preset, serving `public/` instead of Next.js routes. `vercel.json` now explicitly selects `nextjs` and the production build command. The first generated-domain deployment was automatically classified as production by Vercel; subsequent deployments explicitly target preview. No custom domain was configured.
