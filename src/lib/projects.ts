@@ -117,4 +117,6 @@ export const projects: Project[] = [
 ];
 export const builds = projects.filter(p => p.kind !== 'media');
 export const projectBySlug = (slug: string) => projects.find(project => project.slug === slug);
-export const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+// Production uses the public project domain; per-deployment URLs sit behind Vercel's deployment protection.
+const vercelHost = process.env.VERCEL_ENV === 'production' && process.env.VERCEL_PROJECT_PRODUCTION_URL ? process.env.VERCEL_PROJECT_PRODUCTION_URL : process.env.VERCEL_URL;
+export const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL || (vercelHost ? `https://${vercelHost}` : 'http://localhost:3000');
