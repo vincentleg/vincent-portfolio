@@ -1,0 +1,8 @@
+portfolio-starter
+.git
+test-results
+playwright-report
+e2e
+docs
+scripts
+.env*

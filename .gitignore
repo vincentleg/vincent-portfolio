@@ -147,3 +147,12 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Source media may contain private business data; publish reviewed derivatives only.
+portfolio-starter/
+.vercel/
+test-results/
+playwright-report/
+.vercel
+.env*
+!.env.example

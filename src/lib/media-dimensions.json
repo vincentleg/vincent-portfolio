@@ -1,0 +1,30 @@
+{
+  "/media/handshake-loops.webp": {
+    "width": 1800,
+    "height": 925
+  },
+  "/media/handshake-overview.webp": {
+    "width": 1800,
+    "height": 1015
+  },
+  "/media/intent-decision.webp": {
+    "width": 1800,
+    "height": 1014
+  },
+  "/media/intent-overview.webp": {
+    "width": 1800,
+    "height": 1016
+  },
+  "/media/orqo-agents.webp": {
+    "width": 1525,
+    "height": 1148
+  },
+  "/media/steward-connections.webp": {
+    "width": 1800,
+    "height": 999
+  },
+  "/media/steward-world.webp": {
+    "width": 1800,
+    "height": 1013
+  }
+}
