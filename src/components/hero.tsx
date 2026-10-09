@@ -1,6 +1,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import portrait from '../../public/media/vincent-portrait.png';
 import { Component, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { featuredProjects } from '@/lib/projects';
 import { ProjectVisual } from './project-visual';
@@ -19,7 +20,7 @@ function StaticGalaxy({ highlighted }: { highlighted: number | null }) {
     {Array.from({ length: 180 }, (_, i) => <circle key={i} cx={((Math.sin(i * 127.1) + 1) / 2) * 790 + 5} cy={((Math.cos(i * 73.7) + 1) / 2) * 690 + 5} r={i % 11 === 0 ? 1.4 : .65} fill={i % 7 ? '#b7d5ff' : '#e9cbaa'} opacity={.2 + (i % 5) * .12}/>)}
     {[0,1,2].map(i => <ellipse key={i} cx="400" cy="350" rx={260 + i * 35} ry={160 + i * 35} fill="none" stroke={highlighted === null ? '#779ce0' : orbitProjects[highlighted].accent} strokeWidth=".7" opacity={i === 2 && highlighted !== null ? .7 : .15}/>)}</svg>;
 }
-export function Hero({ portraitAvailable = false }: { portraitAvailable?: boolean }) {
+export function Hero() {
   const ref = useRef<HTMLElement>(null); const field = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false), [failed, setFailed] = useState(false), [paused, setPaused] = useState(false), [visible, setVisible] = useState(true), [compact, setCompact] = useState(false), [reduced, setReduced] = useState(false), [highlighted, setHighlighted] = useState<number | null>(null);
   useEffect(() => {
@@ -41,7 +42,7 @@ export function Hero({ portraitAvailable = false }: { portraitAvailable?: boolea
     <div className="hero-copy"><p className="hero-pretitle">VINCENT LEGUIDE <span/> 26 · FRENCH · BAY AREA</p><h1 id="hero-title">Building<br/>what comes<br/><em>next.</em></h1><p className="hero-description">I build AI products, connect people and ideas, and write from inside Silicon Valley.</p><p className="hero-context">After five years in sustainable AI infrastructure, I moved to California in August 2025. Today, I represent INFODIP in the US, develop technology partnerships, and build my own experiments in what’s next.</p><a className="universe-cta" href="#work">Explore what I’m building <span aria-hidden="true">↘</span></a></div>
     <div className="galaxy-field" ref={field} onPointerMove={e => { if (reduced || paused || e.pointerType !== 'mouse' || !field.current) return; const r = e.currentTarget.getBoundingClientRect(); field.current.style.setProperty('--px', `${(e.clientX - r.left - r.width / 2) * .018}px`); field.current.style.setProperty('--py', `${(e.clientY - r.top - r.height / 2) * .018}px`); }} onPointerLeave={() => { field.current?.style.setProperty('--px', '0px'); field.current?.style.setProperty('--py', '0px'); }}>
       <div className="galaxy-depth"><StaticGalaxy highlighted={highlighted}/>{live && <div className="galaxy-canvas" aria-hidden="true"><SceneBoundary onFailure={() => setFailed(true)}><OrbitalScene active={!frozen} compact={compact} onFailure={() => setFailed(true)}/></SceneBoundary></div>}</div>
-      <div className="galaxy-core"><div className="portrait-halo"/><div className="portrait-mask">{portraitAvailable ? <Image src="/media/vincent-portrait.png" alt="Vincent Leguide" fill priority sizes="(max-width: 760px) 125px, 210px"/> : <div className="portrait-monogram" role="img" aria-label="Vincent Leguide monogram; portrait coming soon"><span>VL</span><small>PORTRAIT COMING SOON</small></div>}</div><span className="core-name">VINCENT LEGUIDE</span></div>
+      <div className="galaxy-core"><div className="portrait-halo"/><div className="portrait-mask"><Image src={portrait} alt="Vincent Leguide" fill priority sizes="(max-width: 760px) 155px, 210px"/></div><span className="core-name">VINCENT LEGUIDE</span></div>
       <nav className="galaxy-projects" aria-label="Explore my projects" onMouseLeave={() => setHighlighted(null)}>{orbitProjects.map((p, i) => <a key={p.slug} href={`#project-${p.slug}`} className="galaxy-project" style={{ '--project-accent': p.accent, '--phase': `${(i * 100 / orbitProjects.length + 6) % 100}%` } as CSSProperties} onMouseEnter={() => setHighlighted(i)} onFocus={() => setHighlighted(i)} onBlur={() => setHighlighted(null)}><span className="planet" aria-hidden="true"/><span className="planet-label"><small>{p.number} / {p.kind === 'media' ? 'WRITING' : 'BUILDING'}</small>{p.name}</span><span className="planet-preview" aria-hidden="true"><ProjectVisual project={p} sizes="220px"/><span>{p.status} ↗</span></span></a>)}</nav>
       <p className="galaxy-caption">ONE PERSON. A UNIVERSE OF POSSIBILITIES.</p>
     </div>

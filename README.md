@@ -62,7 +62,7 @@ Scale testing: `NEXT_PUBLIC_PORTFOLIO_FIXTURES=20 npm run build && NEXT_PUBLIC_P
 
 ## Galaxy and portrait
 
-Add Vincent’s unmodified real photo at `public/media/vincent-portrait.png`, then rebuild and deploy. The homepage checks for this file at build time. Until it exists, it displays an explicitly labeled VL monogram, with no missing image request or substitute face. The image uses a circular `object-fit: cover` crop; adjust `object-position` in `.portrait-mask img` if needed for the supplied photo.
+The galaxy uses Vincent’s unmodified real photo at `public/media/vincent-portrait.png`, imported at build time and served through Next.js responsive image optimization. The circular frame and blue orbital halo preserve the original facial features; `object-fit: cover` and `object-position: center 35%` keep the face and hair in view on desktop and mobile.
 
 The hero shows the first five featured projects to keep orbital labels readable. Every project still receives a full homepage chapter and a compatibility route from `src/lib/projects.ts`. Hover or keyboard focus previews a project; activation navigates to its same-page chapter. Existing index transitions and screenshot-card transforms are reused. Each chapter includes links and expandable evidence and galleries.
 
