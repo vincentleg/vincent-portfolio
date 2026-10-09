@@ -1,46 +1,30 @@
 'use client';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
-type Body = { color: string; page: boolean };
-function OrbitalSystem({ active, compact, bodies }: { active: boolean; compact: boolean; bodies: Body[] }) {
+// Seeded spiral arms: one points draw call, no postprocessing or texture downloads.
+function Galaxy({ active, compact }: { active: boolean; compact: boolean }) {
   const group = useRef<THREE.Group>(null);
-  const satellites = useRef<THREE.Group>(null);
-  const { pointer } = useThree();
-  const scroll = useRef(0);
-  useEffect(() => { const read = () => { scroll.current = Math.min(window.scrollY / window.innerHeight, 1); }; window.addEventListener('scroll', read, { passive: true }); return () => window.removeEventListener('scroll', read); }, []);
-  useFrame((state, delta) => {
-    if (!active || !group.current || !satellites.current) return;
-    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, pointer.x * .18 + scroll.current * .4, .035);
-    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, pointer.y * .1, .035);
-    satellites.current.rotation.z += Math.min(delta, .05) * .055;
-    group.current.position.y = Math.sin(state.clock.elapsedTime * .35) * .055;
-  });
-  const stars = useMemo(() => {
-    const data = new Float32Array((compact ? 45 : 110) * 3);
-    for (let i = 0; i < data.length; i++) data[i] = Math.sin(i * 127.1 + 311.7) * (i % 3 === 2 ? 3 : 5);
-    return data;
+  const [positions, colors] = useMemo(() => {
+    const count = compact ? 2600 : 6500, positions = new Float32Array(count * 3), colors = new Float32Array(count * 3);
+    const inner = new THREE.Color('#dcc6aa'), outer = new THREE.Color('#497fe8');
+    const random = (n: number) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+    for (let i = 0; i < count; i++) {
+      const radius = .25 + Math.pow(random(i + 1), .7) * 3.9;
+      const angle = (i % 4) * Math.PI / 2 + radius * 1.5;
+      const spread = .06 + radius * .12;
+      positions[i * 3] = Math.cos(angle) * radius + (random(i + 2) - .5) * spread * 2;
+      positions[i * 3 + 1] = (random(i + 3) - .5) * spread * .7;
+      positions[i * 3 + 2] = Math.sin(angle) * radius + (random(i + 4) - .5) * spread * 2;
+      const color = inner.clone().lerp(outer, Math.min(radius / 3, 1)).multiplyScalar(.55 + random(i + 5) * .65);
+      colors.set([color.r, color.g, color.b], i * 3);
+    }
+    return [positions, colors];
   }, [compact]);
-  return <>
-    <ambientLight intensity={.45}/><directionalLight position={[-3, 4, 5]} intensity={3.4} color="#f5d4b7"/><pointLight position={[3, -2, 3]} intensity={30} color="#ac624b"/><pointLight position={[-4, 1, -2]} intensity={34} color="#6f93d6"/>
-    <points><bufferGeometry><bufferAttribute attach="attributes-position" args={[stars, 3]}/></bufferGeometry><pointsMaterial size={.011} color="#b5aaa0" transparent opacity={.55} sizeAttenuation/></points>
-    <group ref={group} rotation={[0, 0, -.3]}>
-      <mesh><sphereGeometry args={[.64, compact ? 32 : 64, 32]}/><meshStandardMaterial color="#332722" metalness={.93} roughness={.29}/></mesh>
-      <mesh rotation={[.4, .2, .1]}><icosahedronGeometry args={[.72, 1]}/><meshBasicMaterial color="#dba887" wireframe transparent opacity={.23}/></mesh>
-      <group rotation={[1.08, .2, -.18]}>
-        {[1.08, 1.25, 1.9, 2.55, 2.62, 2.94].map((radius, i) => <mesh key={radius} rotation={[i === 2 ? .3 : 0, i === 3 ? -.18 : 0, 0]}><torusGeometry args={[radius, i === 1 ? .022 : .006, 8, compact ? 100 : 220]}/><meshStandardMaterial color={i === 1 ? '#e3b08c' : '#a98971'} metalness={.7} roughness={.4} transparent opacity={i === 4 ? .3 : .85}/></mesh>)}
-        <mesh rotation={[0, 0, -.6]}><torusGeometry args={[2.28, .035, 8, 120, Math.PI * 1.32]}/><meshStandardMaterial color="#c39474" metalness={.85} roughness={.3}/></mesh>
-        <mesh rotation={[0, 0, 2.4]}><torusGeometry args={[1.55, .012, 8, 100, Math.PI * 1.55]}/><meshBasicMaterial color="#e2b28e"/></mesh>
-        <group ref={satellites}>{bodies.map((b, i) => { const angle = i * 2.4 + .5; const r = [1.25, 1.9, 2.55, 2.94, 3.13][i % 5]; return <group key={i} position={[Math.cos(angle) * r, Math.sin(angle) * r, 0]}>{b.page
-          ? <mesh rotation={[.5, .7, .4]}><boxGeometry args={[.2, .26, .012]}/><meshStandardMaterial color={b.color} emissive={b.color} emissiveIntensity={.3} metalness={.3} roughness={.5}/></mesh>
-          : <mesh><sphereGeometry args={[i === 0 ? .13 : .085, 24, 16]}/><meshStandardMaterial color={b.color} emissive={b.color} emissiveIntensity={.25} metalness={.6} roughness={.25}/></mesh>}<mesh><ringGeometry args={[.18, .19, b.page ? 4 : 36]}/><meshBasicMaterial color="#cbb7a5" side={THREE.DoubleSide} transparent opacity={.6}/></mesh></group>; })}</group>
-        {Array.from({length: compact ? 36 : 72}, (_, i) => {const a = i * Math.PI * 2 / (compact ? 36 : 72); return <mesh key={i} position={[Math.cos(a) * 3.13, Math.sin(a) * 3.13, 0]} rotation={[0, 0, a]}><boxGeometry args={[i % 6 === 0 ? .09 : .03, .009, .008]}/><meshBasicMaterial color="#6b6058"/></mesh>;})}
-      </group>
-      <group rotation={[.2, 1.1, -.8]}><mesh><torusGeometry args={[2.1, .008, 8, 160]}/><meshStandardMaterial color="#d2b6a0" metalness={.8} roughness={.4}/></mesh></group>
-    </group>
-  </>;
+  useFrame((_, delta) => { if (active && group.current) group.current.rotation.y += Math.min(delta, .05) * .018; });
+  return <group rotation={[.55, 0, -.3]}><group ref={group}><points><bufferGeometry><bufferAttribute attach="attributes-position" args={[positions, 3]}/><bufferAttribute attach="attributes-color" args={[colors, 3]}/></bufferGeometry><shaderMaterial transparent depthWrite={false} blending={THREE.AdditiveBlending} vertexColors uniforms={{ pointSize: { value: compact ? 14 : 20 } }} vertexShader={`varying vec3 vColor; uniform float pointSize; void main(){ vColor=color; vec4 mv=modelViewMatrix*vec4(position,1.0); gl_Position=projectionMatrix*mv; gl_PointSize=clamp(pointSize/-mv.z,1.0,5.0); }`} fragmentShader={`varying vec3 vColor; void main(){float d=length(gl_PointCoord-.5); if(d>.5) discard; gl_FragColor=vec4(vColor,pow(1.0-d*2.0,2.0)*.8);}`}/></points></group></group>;
 }
-export default function OrbitalScene({ active, compact, bodies, onFailure }: { active: boolean; compact: boolean; bodies: Body[]; onFailure: () => void }) {
-  return <Canvas camera={{ position: [0, .2, 7.9], fov: 43 }} dpr={compact ? 1 : [1, 1.5]} frameloop={active ? 'always' : 'demand'} gl={{ antialias: !compact, alpha: true, powerPreference: 'low-power' }} onCreated={({ gl }) => { gl.domElement.addEventListener('webglcontextlost', onFailure, { once: true }); }}><OrbitalSystem active={active} compact={compact} bodies={bodies}/></Canvas>;
+export default function OrbitalScene({ active, compact, onFailure }: { active: boolean; compact: boolean; onFailure: () => void }) {
+  return <Canvas camera={{ position: [0, 5.5, 6.5], fov: 47 }} dpr={compact ? 1 : [1, 1.5]} frameloop={active ? 'always' : 'demand'} gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }} onCreated={({ gl }) => { gl.domElement.addEventListener('webglcontextlost', onFailure, { once: true }); }}><Galaxy active={active} compact={compact}/></Canvas>;
 }

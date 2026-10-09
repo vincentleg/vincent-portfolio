@@ -16,7 +16,7 @@ export function ProjectIndex({ items, total }: { items: NumberedProject[]; total
     <div className="pindex-layout">
       <ol className="pindex-list">
         {items.map((p, i) => <li key={p.slug} style={{ '--project-accent': p.accent } as React.CSSProperties}>
-          <Link href={`/work/${p.slug}`} className={`pindex-row ${i === active ? 'on' : ''}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)}>
+          <Link href={`#project-${p.slug}`} className={`pindex-row ${i === active ? 'on' : ''}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)}>
             <span className="pindex-num">{p.number}</span>
             <span className="pindex-main"><span className="pindex-name">{p.name}</span><span className="pindex-hook">{p.hook}</span></span>
             <span className="pindex-cat">{p.category}<small>{p.status}</small></span>

@@ -13,7 +13,7 @@ export function Header() {
     update(); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll);
     return () => { removeEventListener('scroll', onScroll); removeEventListener('resize', onScroll); cancelAnimationFrame(frame); };
   }, [pathname]);
-  return <header className="site-header" ref={ref}><span className="scroll-progress" aria-hidden="true"/><Link className="brand" href="/" aria-label="Vincent Leguide — The Builder’s Universe, homepage"><Mark/><span>Vincent Leguide<span className="brand-sub">THE BUILDER’S UNIVERSE</span></span></Link><nav aria-label="Main navigation"><Link href="/work" aria-current={pathname.startsWith('/work') ? 'page' : undefined}>Work</Link><Link href="/about" aria-current={pathname === '/about' ? 'page' : undefined}>About</Link><a href="#contact" className="nav-contact">Contact</a></nav></header>;
+  return <header className="site-header" ref={ref}><span className="scroll-progress" aria-hidden="true"/><Link className="brand" href="/" aria-label="Vincent Leguide — The Builder’s Universe, homepage"><Mark/><span>Vincent Leguide<span className="brand-sub">THE BUILDER’S UNIVERSE</span></span></Link><nav aria-label="Main navigation"><Link href="/#work">Work</Link><Link href="/#journey">Journey</Link><a href="#contact" className="nav-contact">Contact</a></nav></header>;
 }
 const contacts = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/vincent-leguide-640b29194/', note: 'Partnerships & conversations' },

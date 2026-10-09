@@ -1,9 +1,11 @@
 'use client';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { Component, useEffect, useRef, useState, type ReactNode } from 'react';
+import Image from 'next/image';
+import { Component, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { featuredProjects } from '@/lib/projects';
-const bodies = featuredProjects.map(p => ({ color: p.accent, page: p.kind === 'media' }));
+import { ProjectVisual } from './project-visual';
+// Keep the hero legible as the catalogue grows; every project remains in the page below.
+const orbitProjects = featuredProjects.slice(0, 5);
 const OrbitalScene = dynamic(() => import('./orbital-scene'), { ssr: false });
 class SceneBoundary extends Component<{ children: ReactNode; onFailure: () => void }, { failed: boolean }> {
   state = { failed: false };
@@ -11,23 +13,38 @@ class SceneBoundary extends Component<{ children: ReactNode; onFailure: () => vo
   componentDidCatch() { this.props.onFailure(); }
   render() { return this.state.failed ? null : this.props.children; }
 }
-function StaticOrbit() { return <svg className="static-orbit" viewBox="0 0 700 600" aria-hidden="true"><defs><radialGradient id="core"><stop stopColor="#c79776"/><stop offset=".4" stopColor="#665043"/><stop offset="1" stopColor="#191a1b"/></radialGradient></defs><g fill="none" stroke="#a78970" strokeWidth=".8" transform="translate(350 300) rotate(-25)">{[100,155,220,270].map(r => <ellipse key={r} rx={r} ry={r * .42}/>)}<ellipse rx="230" ry="85" transform="rotate(65)"/><circle r="49" fill="url(#core)"/>{bodies.map((b, i) => { const a = i * 2.4 + .5, r = [100, 155, 220, 270][i % 4]; const x = Math.cos(a) * r, y = Math.sin(a) * r * .42; return b.page ? <rect key={i} x={x - 4} y={y - 4} width="9" height="9" fill={b.color} transform={`rotate(45 ${x} ${y})`}/> : <circle key={i} cx={x} cy={y} r={i ? 5 : 7} fill={b.color}/>; })}</g></svg>; }
-export function Hero() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false); const [failed, setFailed] = useState(false); const [paused, setPaused] = useState(false); const [visible, setVisible] = useState(true); const [compact, setCompact] = useState(false); const [reduced, setReduced] = useState(false);
+function StaticGalaxy({ highlighted }: { highlighted: number | null }) {
+  return <svg className="static-orbit" viewBox="0 0 800 700" aria-hidden="true"><defs><radialGradient id="galaxy-haze"><stop stopColor="#78b8ff" stopOpacity=".24"/><stop offset=".5" stopColor="#334ebc" stopOpacity=".09"/><stop offset="1" stopColor="#080d21" stopOpacity="0"/></radialGradient><filter id="galaxy-soft"><feGaussianBlur stdDeviation="4"/></filter></defs><ellipse cx="400" cy="350" rx="385" ry="275" fill="url(#galaxy-haze)"/>
+    <g transform="translate(400 350) rotate(-22)">{Array.from({ length: 5 }, (_, arm) => <path key={arm} d={Array.from({ length: 130 }, (_, i) => { const r = 20 + i * 2.5, a = i * .028 + arm * Math.PI * .4; return `${i ? 'L' : 'M'}${Math.cos(a) * r},${Math.sin(a) * r * .65}`; }).join(' ')} fill="none" stroke={arm % 2 ? '#677ad3' : '#639adf'} strokeWidth="10" opacity=".15" filter="url(#galaxy-soft)"/>)}</g>
+    {Array.from({ length: 180 }, (_, i) => <circle key={i} cx={((Math.sin(i * 127.1) + 1) / 2) * 790 + 5} cy={((Math.cos(i * 73.7) + 1) / 2) * 690 + 5} r={i % 11 === 0 ? 1.4 : .65} fill={i % 7 ? '#b7d5ff' : '#e9cbaa'} opacity={.2 + (i % 5) * .12}/>)}
+    {[0,1,2].map(i => <ellipse key={i} cx="400" cy="350" rx={260 + i * 35} ry={160 + i * 35} fill="none" stroke={highlighted === null ? '#779ce0' : orbitProjects[highlighted].accent} strokeWidth=".7" opacity={i === 2 && highlighted !== null ? .7 : .15}/>)}</svg>;
+}
+export function Hero({ portraitAvailable = false }: { portraitAvailable?: boolean }) {
+  const ref = useRef<HTMLElement>(null); const field = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false), [failed, setFailed] = useState(false), [paused, setPaused] = useState(false), [visible, setVisible] = useState(true), [compact, setCompact] = useState(false), [reduced, setReduced] = useState(false), [highlighted, setHighlighted] = useState<number | null>(null);
   useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)'); const small = window.matchMedia('(max-width: 760px)');
-    const sync = () => { setReduced(media.matches); setCompact(small.matches); };
-    sync(); media.addEventListener('change', sync); small.addEventListener('change', sync);
-    // Mount WebGL only once the page is idle: the static orbit paints first, so 3D never delays first render.
+    const media = matchMedia('(prefers-reduced-motion: reduce)'), small = matchMedia('(max-width: 760px)');
+    const sync = () => { setReduced(media.matches); setCompact(small.matches); }; sync();
+    media.addEventListener('change', sync); small.addEventListener('change', sync);
     const canvas = document.createElement('canvas'); const gl = canvas.getContext('webgl2'); const supported = !!gl; gl?.getExtension('WEBGL_lose_context')?.loseContext();
-    const idle = (cb: () => void) => typeof window.requestIdleCallback === 'function' ? window.requestIdleCallback(cb, { timeout: 2500 }) : setTimeout(cb, 1200);
-    let started = false; const start = () => { if (!started && supported) { started = true; idle(() => setReady(true)); } };
-    if (document.readyState === 'complete') start(); else window.addEventListener('load', start, { once: true });
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting && !document.hidden)); if (ref.current) observer.observe(ref.current);
-    const visibility = () => setVisible(!document.hidden && (ref.current?.getBoundingClientRect().bottom ?? 0) > 0); document.addEventListener('visibilitychange', visibility);
-    return () => { window.removeEventListener('load', start); observer.disconnect(); media.removeEventListener('change', sync); small.removeEventListener('change', sync); document.removeEventListener('visibilitychange', visibility); };
+    const timer = setTimeout(() => setReady(supported), 900);
+    let intersecting = true;
+    const update = () => setVisible(intersecting && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => { intersecting = entry.isIntersecting; update(); }); if (ref.current) observer.observe(ref.current);
+    document.addEventListener('visibilitychange', update);
+    return () => { clearTimeout(timer); observer.disconnect(); media.removeEventListener('change', sync); small.removeEventListener('change', sync); document.removeEventListener('visibilitychange', update); };
   }, []);
   const live = ready && !failed && !reduced;
-  return <section className="hero" ref={ref} aria-labelledby="hero-title"><div className="hero-topline"><span className="eyebrow hero-place-top"><i/> SAN FRANCISCO BAY AREA · SILICON VALLEY</span><span className="coordinates">37°46′ N &nbsp; 122°25′ W</span></div><div className="hero-art" role="img" aria-label="An orbital system: each body is one of Vincent Leguide’s projects.">{!live && <StaticOrbit/>}{live && <SceneBoundary onFailure={() => setFailed(true)}><OrbitalScene active={!paused && visible} compact={compact} bodies={bodies} onFailure={() => setFailed(true)}/></SceneBoundary>}<div className="orbit-label label-top"><i/> INTELLIGENCE, CONNECTED</div><div className="orbit-label label-bottom"><span>FIG. 01</span> THE BUILDER’S UNIVERSE</div><div className="orbit-cross cross-one">+</div><div className="orbit-cross cross-two">+</div></div><div className="hero-copy"><p className="hero-pretitle"><span/> VINCENT LEGUIDE</p><p className="hero-roles">AI Builder <i>·</i> Business Developer <i>·</i> Writer</p><h1 id="hero-title">Building<br/>what comes<br/><em>next.</em></h1><p className="hero-description">Based in Silicon Valley. Building AI products, developing technology partnerships, and documenting the ecosystem in <em>Notebook from the Valley</em> — grounded in five years of sustainable AI infrastructure.</p><Link className="button button-light" href="#work">Explore the work <span aria-hidden="true">↘</span></Link></div><div className="hero-bottom"><span/>{live ? <button className="motion-toggle" onClick={() => setPaused(v => !v)} aria-pressed={paused}>{paused ? '↻ Resume orbit' : 'Ⅱ Pause orbit'}</button> : <span className="motion-toggle">Static orbital view</span>}</div></section>;
+  const frozen = paused || reduced || !visible;
+  return <section className={`hero universe-hero ${frozen ? 'is-paused' : ''}`} ref={ref} aria-labelledby="hero-title">
+    <div className="hero-topline"><span className="eyebrow hero-place-top"><i/> A FRENCH PERSPECTIVE. A SILICON VALLEY CHAPTER.</span><span className="coordinates">37°46′ N · 122°25′ W</span></div>
+    <div className="hero-copy"><p className="hero-pretitle">VINCENT LEGUIDE <span/> 26 · FRENCH · BAY AREA</p><h1 id="hero-title">Building<br/>what comes<br/><em>next.</em></h1><p className="hero-description">I build AI products, connect people and ideas, and write from inside Silicon Valley.</p><p className="hero-context">After five years in sustainable AI infrastructure, I moved to California in August 2025. Today, I represent INFODIP in the US, develop technology partnerships, and build my own experiments in what’s next.</p><a className="universe-cta" href="#work">Explore what I’m building <span aria-hidden="true">↘</span></a></div>
+    <div className="galaxy-field" ref={field} onPointerMove={e => { if (reduced || paused || e.pointerType !== 'mouse' || !field.current) return; const r = e.currentTarget.getBoundingClientRect(); field.current.style.setProperty('--px', `${(e.clientX - r.left - r.width / 2) * .018}px`); field.current.style.setProperty('--py', `${(e.clientY - r.top - r.height / 2) * .018}px`); }} onPointerLeave={() => { field.current?.style.setProperty('--px', '0px'); field.current?.style.setProperty('--py', '0px'); }}>
+      <div className="galaxy-depth"><StaticGalaxy highlighted={highlighted}/>{live && <div className="galaxy-canvas" aria-hidden="true"><SceneBoundary onFailure={() => setFailed(true)}><OrbitalScene active={!frozen} compact={compact} onFailure={() => setFailed(true)}/></SceneBoundary></div>}</div>
+      <div className="galaxy-core"><div className="portrait-halo"/><div className="portrait-mask">{portraitAvailable ? <Image src="/media/vincent-portrait.png" alt="Vincent Leguide" fill priority sizes="(max-width: 760px) 125px, 210px"/> : <div className="portrait-monogram" role="img" aria-label="Vincent Leguide monogram; portrait coming soon"><span>VL</span><small>PORTRAIT COMING SOON</small></div>}</div><span className="core-name">VINCENT LEGUIDE</span></div>
+      <nav className="galaxy-projects" aria-label="Explore my projects" onMouseLeave={() => setHighlighted(null)}>{orbitProjects.map((p, i) => <a key={p.slug} href={`#project-${p.slug}`} className="galaxy-project" style={{ '--project-accent': p.accent, '--phase': `${(i * 100 / orbitProjects.length + 6) % 100}%` } as CSSProperties} onMouseEnter={() => setHighlighted(i)} onFocus={() => setHighlighted(i)} onBlur={() => setHighlighted(null)}><span className="planet" aria-hidden="true"/><span className="planet-label"><small>{p.number} / {p.kind === 'media' ? 'WRITING' : 'BUILDING'}</small>{p.name}</span><span className="planet-preview" aria-hidden="true"><ProjectVisual project={p} sizes="220px"/><span>{p.status} ↗</span></span></a>)}</nav>
+      <p className="galaxy-caption">ONE PERSON. A UNIVERSE OF POSSIBILITIES.</p>
+    </div>
+    <div className="hero-bottom"><span>SCROLL TO EXPLORE <span aria-hidden="true">↓</span></span>{!reduced && <button className="motion-toggle" onClick={() => setPaused(v => !v)} aria-pressed={paused}>{paused ? '↻ Resume orbit' : 'Ⅱ Pause orbit'}</button>}</div>
+  </section>;
 }

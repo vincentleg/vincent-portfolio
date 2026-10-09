@@ -9,17 +9,11 @@ const noOverflow = (page: Page) => page.evaluate(() => document.documentElement.
 test(`scale: ${total} projects render without overlap or overflow`, async ({ page, isMobile }) => {
   for (const route of ['/', '/work']) { await page.goto(route); expect(await noOverflow(page)).toBeTruthy(); }
   await page.goto('/work'); await expect(page.locator('.work-tile')).toHaveCount(total);
-  await page.goto('/'); await page.locator('.constellation').scrollIntoViewIfNeeded();
-  if (isMobile) { await expect(page.locator('.constellation-list a')).toHaveCount(total); return; }
-  const nodes = page.locator('.star-node'); await expect(nodes).toHaveCount(total);
-  const dots = await page.locator('.star-dot').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; }));
-  for (let i = 0; i < dots.length; i++) for (let j = i + 1; j < dots.length; j++) expect(overlap(dots[i], dots[j]), `nodes ${i} and ${j} overlap`).toBeFalsy();
-  for (const i of [0, Math.floor(total / 2), total - 1]) {
-    await nodes.nth(i).hover();
-    const labels = await page.locator('.node-name').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; }));
-    for (let a = 0; a < labels.length; a++) { for (let b = a + 1; b < labels.length; b++) expect(overlap(labels[a], labels[b]), 'labels overlap').toBeFalsy(); }
-    const map = await page.locator('.star-map').boundingBox(); for (const l of labels) expect(l.x >= map!.x - 140 && l.x + l.width <= map!.x + map!.width + 140).toBeTruthy();
-  }
+  await page.goto('/'); await expect(page.locator('.project-chapter')).toHaveCount(total);
+  const nodes = page.locator('.galaxy-project'); await expect(nodes).toHaveCount(Math.min(total, 5));
+  await page.emulateMedia({reducedMotion:'reduce'});
+  const boxes = await nodes.evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { x:r.x, y:r.y, width:r.width, height:r.height }; }));
+  for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) expect(overlap(boxes[i], boxes[j]), `orbit links ${i} and ${j} overlap`).toBeFalsy();
 });
 
 test('keyboard: index rows drive the preview stage; filters narrow the work grid', async ({ page, isMobile }) => {
