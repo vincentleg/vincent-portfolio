@@ -156,3 +156,5 @@ playwright-report/
 .vercel
 .env*
 !.env.example
+
+.DS_Store

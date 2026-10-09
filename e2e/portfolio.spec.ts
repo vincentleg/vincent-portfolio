@@ -7,6 +7,7 @@ test('all routes, real media, metadata, and responsive containment', async ({pag
     const response = await page.goto(route); expect(response?.status()).toBe(200);
     await expect(page.locator('h1')).toBeVisible(); await expect(page).toHaveTitle(/Vincent Leguide/);
     await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', new RegExp(`${route === '/' ? '/?' : route}$`));
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBeTruthy();
     for (const img of await page.locator('main img:visible').all()) { await img.scrollIntoViewIfNeeded(); await expect.poll(() => img.evaluate((el:HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBeTruthy(); }
   }
@@ -32,6 +33,7 @@ test('one-page navigation, project previews, details and contact', async ({page,
 test('reduced motion is static and accessible', async ({page}) => {
   await page.emulateMedia({reducedMotion:'reduce'}); await page.goto('/');
   await expect(page.locator('.static-orbit')).toBeVisible(); await expect(page.locator('.hero canvas')).toHaveCount(0);
+  await expect(page.locator('.star-twinkle').first()).toHaveCSS('animation-name', 'none');
   for(const route of routes) {
     await page.goto(route); const results = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze(); expect(results.violations).toEqual([]);
   }
@@ -58,8 +60,10 @@ test('each case study has its own signature diagram and fact strip', async ({pag
 });
 test('WebGL scene and pause control', async ({page}) => {
   await page.goto('/'); await expect(page.locator('.hero canvas')).toBeVisible({timeout:20000});
+  await expect(page.locator('.galaxy-core img')).toHaveAttribute('alt', 'Vincent Leguide');
   const pause = page.getByRole('button',{name:'Pause orbit'}); await expect(pause).toBeVisible(); await pause.click();
   await expect(page.getByRole('button',{name:'Resume orbit'})).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('.star-twinkle').first()).toHaveCSS('animation-play-state', 'paused');
   await page.getByRole('button',{name:'Resume orbit'}).click(); await expect(page.getByRole('button',{name:'Pause orbit'})).toHaveAttribute('aria-pressed','false');
 });
 test('WebGL unavailable preserves the hero and navigation', async ({page}) => {

@@ -9,7 +9,11 @@ export function ScrollMotion() {
       if (cancelled) return; gsap.registerPlugin(ScrollTrigger);
       const mm = gsap.matchMedia();
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        if (document.querySelector('.galaxy-field')) gsap.to('.galaxy-field', { yPercent: 12, opacity: .15, ease: 'none', scrollTrigger: { trigger: '.universe-hero', start: 'top top', end: 'bottom 15%', scrub: .8 } });
+        if (document.querySelector('.galaxy-field')) gsap.to('.galaxy-travel', { yPercent: 10, scale: 1.14, opacity: .55, ease: 'none', scrollTrigger: { trigger: '.universe-hero', start: 'top top', end: 'bottom 15%', scrub: .8 } });
+        if (document.querySelector('.journey-track')) {
+          gsap.fromTo('.journey-track', { '--journey-progress': 0 }, { '--journey-progress': 1, ease: 'none', scrollTrigger: { trigger: '.journey-track', start: 'top 75%', end: 'bottom 70%', scrub: .5 } });
+          gsap.utils.toArray<HTMLElement>('.journey-track li').forEach(el => gsap.fromTo(el, { '--node-light': .35 }, { '--node-light': 1, duration: .7, scrollTrigger: { trigger: el, start: 'top 75%', toggleActions: 'play none none reverse' } }));
+        }
         gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach(el => gsap.from(el, { y: 30, opacity: .25, duration: .85, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 94%', once: true } }));
         if (window.innerWidth >= 900 && document.querySelector('.flagship-stage')) {
           gsap.fromTo('.flagship-stage', { rotateX: 12, scale: .86, y: 70 }, { rotateX: 0, scale: 1, y: 0, ease: 'none', scrollTrigger: { trigger: '.flagship', start: 'top 75%', end: 'center 48%', scrub: .8 } });

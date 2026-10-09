@@ -6,3 +6,5 @@ e2e
 docs
 scripts
 .env*
+
+**/.DS_Store

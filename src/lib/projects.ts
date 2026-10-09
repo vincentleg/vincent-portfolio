@@ -134,7 +134,9 @@ const fixtureTarget = Number(process.env.NEXT_PUBLIC_PORTFOLIO_FIXTURES || 0);
 const all = fixtureTarget > entries.length ? [...entries, ...fixtureProjects(fixtureTarget - entries.length)] : entries;
 /** Display order: as authored. Numbers are derived, never hand-maintained. */
 export const projects: NumberedProject[] = all.map((p, i) => ({ ...p, number: String(i + 1).padStart(2, '0') }));
-export const featuredProjects = projects.filter(p => p.featured).slice(0, 8);
+// Authored order sets priority. Keep the orbital navigation capped, not the catalogue.
+export const featuredProjects = projects.filter(p => p.featured);
+export const orbitProjects = featuredProjects.slice(0, 5);
 export const groups = [...new Set(projects.map(p => p.group))];
 export const byDate = (order: 'newest' | 'oldest' = 'newest') => [...projects].sort((a, b) => (order === 'newest' ? -1 : 1) * a.date.localeCompare(b.date) || a.number.localeCompare(b.number));
 /** Symmetric, de-duplicated relationship edges between existing projects. */

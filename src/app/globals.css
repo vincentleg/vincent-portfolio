@@ -108,3 +108,26 @@ em{font-style:italic;letter-spacing:-.02em}h1 em,h2 em{font-size:1.06em}
 /* Keep the personal introduction and galaxy together on compact screens. */
 @media(max-width:760px){.universe-hero .hero-topline{display:none}.universe-hero .hero-copy{padding-top:30px}.universe-hero h1{font-size:clamp(40px,10.7vw,60px)}.universe-hero .hero-pretitle{margin-bottom:18px}.universe-hero .hero-description{margin-top:20px}.universe-hero .hero-context{font-size:11px}.galaxy-field{margin-top:2px}}
 @media(min-width:761px) and (max-height:850px){.universe-hero{min-height:670px}.universe-hero .hero-copy{padding-top:95px;padding-bottom:70px}.universe-hero h1{font-size:clamp(62px,6vw,82px)}.universe-hero .hero-pretitle{margin-bottom:20px}.universe-hero .hero-description{margin-top:20px;font-size:15px}.hero-context{font-size:11px}.galaxy-field{top:3%;height:91%}}
+
+/* Final atmospheric pass: procedural light, no additional media or postprocessing. */
+.galaxy-travel{position:absolute;inset:0;transform-origin:50% 50%}
+.galaxy-atmosphere{position:absolute;inset:8% 0;pointer-events:none;background:radial-gradient(ellipse at 48% 48%,#417ecc12,transparent 47%),radial-gradient(ellipse at 67% 36%,#6264b511,transparent 38%),radial-gradient(ellipse at 30% 68%,#2567a814,transparent 35%);transform:rotate(-18deg)}
+.galaxy-atmosphere:after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 22% 24%,#d6e7ffcc 0 1px,#82adf522 2px,transparent 6px),radial-gradient(circle at 76% 61%,#d6e7ffaa 0 1px,#82adf51a 2px,transparent 5px),radial-gradient(circle at 61% 15%,#d6e7ff99 0 1px,transparent 4px)}
+.star-twinkle{animation:star-breathe 7s ease-in-out infinite alternate}
+@keyframes star-breathe{from{opacity:.25}to{opacity:.8}}
+.is-paused .star-twinkle{animation-play-state:paused}
+.galaxy-projects:before{content:'';position:absolute;inset:17% 11%;border:1px solid var(--orbit-accent,#8ebcff);border-radius:50%;opacity:0;transition:opacity .3s,border-color .3s;pointer-events:none;box-shadow:0 0 14px #7faaff0a}
+.galaxy-projects:has(a:hover):before,.galaxy-projects:has(a:focus-visible):before{opacity:.32}
+.galaxy-project:is(:hover,:focus-visible,:active) .planet{transform:scale(1.24);filter:brightness(1.14)}
+.galaxy-project:focus-visible{outline:1px solid var(--project-accent);outline-offset:7px;border-radius:8px}
+.planet-label{max-width:100%;white-space:normal;text-wrap:balance}
+.planet-preview{max-width:28cqw}
+.pindex-stage{box-shadow:0 0 0 1px color-mix(in srgb,var(--project-accent) 14%,transparent),0 0 60px color-mix(in srgb,var(--project-accent) 5%,transparent);transition:box-shadow .5s}
+.journey-track{position:relative;--journey-progress:1}
+.journey-track:before{content:'';position:absolute;top:4px;bottom:0;left:-1px;width:1px;background:linear-gradient(#88baff44,#b5d5ff,#79abff55);transform:scaleY(var(--journey-progress));transform-origin:top;box-shadow:0 0 12px #85b5ff66;pointer-events:none}
+.journey-track li:before{opacity:var(--node-light,1);box-shadow:0 0 0 5px #70a5ff0c,0 0 0 6px #8bb8ff22,0 0 20px #78adff80}
+.contact-links a:is(:hover,:focus-visible){color:#c1d8ff;background:linear-gradient(90deg,#8ebcff08,transparent);padding-left:10px}
+.contact-links i{transition:transform .25s}.contact-links a:is(:hover,:focus-visible) i{transform:translate(2px,-2px)}
+@media(max-width:760px){.galaxy-projects:before{inset:16% 14%}}
+@media(hover:none){.planet-preview{display:none}.galaxy-project:active .planet{transform:scale(1.24)}}
+@media(prefers-reduced-motion:reduce){.star-twinkle{animation:none}.galaxy-travel{transform:none!important;opacity:1!important}.journey-track{--journey-progress:1!important}.journey-track li{--node-light:1!important}.pindex-stage,.contact-links a,.contact-links i,.galaxy-projects:before{transition:none}}
