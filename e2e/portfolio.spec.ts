@@ -103,5 +103,5 @@ test('existing preview transitions and project card depth remain interactive', a
   await expect(card.locator('.pv')).toHaveCSS('transform', 'none');
   await card.hover();
   await expect(card.locator('.pv')).not.toHaveCSS('transform', 'none');
-  await expect(card).toHaveAttribute('href', '/media/orqo-agents.webp');
+  await expect(card).toHaveAttribute('href', '/media/orqo-homepage.webp');
 });
