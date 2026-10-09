@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-const routes = ['/', '/work', '/work/orqo', '/work/intent-firewall', '/work/handshake', '/work/steward', '/work/notebook-from-the-valley', '/about'];
+const routes = ['/', '/work', '/work/orqo', '/work/escape-room', '/work/intent-firewall', '/work/handshake', '/work/steward', '/work/notebook-from-the-valley', '/about'];
 test('all routes, real media, metadata, and responsive containment', async ({page}) => {
   const errors:string[] = []; page.on('pageerror',error => errors.push(error.message));
   for (const route of routes) {
@@ -38,9 +38,9 @@ test('reduced motion is static and accessible', async ({page}) => {
     await page.goto(route); const results = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze(); expect(results.violations).toEqual([]);
   }
 });
-test('all five projects retain real media, links and honest status on the homepage', async ({page}) => {
+test('all six projects retain real media, links and honest status on the homepage', async ({page}) => {
   await page.goto('/');
-  await expect(page.locator('.project-chapter')).toHaveCount(5);
+  await expect(page.locator('.project-chapter')).toHaveCount(6);
   for (const chapter of await page.locator('.project-chapter').all()) {
     await expect(chapter.locator('.project-status')).not.toBeEmpty();
     await expect(chapter.locator('.work-tile-visual img')).toHaveCount(1);
@@ -87,7 +87,7 @@ test('galaxy renders without console errors and compact layouts stay contained',
   for (const width of [320, 768, 1024]) {
     await page.setViewportSize({width, height:800});
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-    await expect(page.locator('.galaxy-project')).toHaveCount(5);
+    await expect(page.locator('.galaxy-project')).toHaveCount(width <= 760 ? 5 : 6);
   }
   expect(errors).toEqual([]);
 });
@@ -104,4 +104,29 @@ test('existing preview transitions and project card depth remain interactive', a
   await card.hover();
   await expect(card.locator('.pv')).not.toHaveCSS('transform', 'none');
   await expect(card).toHaveAttribute('href', '/media/orqo-homepage.webp');
+});
+
+test('V6: authentic escape room, zoom, progressive exploration and page scrolling', async ({ page, isMobile }) => {
+  await page.goto('/');
+  await expect(page.locator('h1')).toContainText('Portfolio');
+  await expect(page.locator('.coordinates')).toHaveText('37°49′ N · 122°29′ W');
+  await expect(page.locator('.galaxy-project[href="#project-escape-room"]')).toBeVisible();
+  await expect(page.locator('.pindex-row[href="#project-escape-room"]')).toBeVisible();
+  const capture = page.locator('#project-escape-room .work-tile-visual img');
+  await expect(capture).toHaveAttribute('src', /escape-room-home/);
+  await page.getByRole('button', {name:'Zoom in', exact:true}).click();
+  await expect(page.getByRole('button', {name:'Reset galaxy zoom'})).toHaveText('115%');
+  await page.getByRole('button', {name:'Reset galaxy zoom'}).click();
+  await expect(page.getByRole('button', {name:'Reset galaxy zoom'})).toHaveText('100%');
+  if (isMobile) {
+    await page.getByRole('button', {name:'Next project group'}).click();
+    await expect(page.locator('.galaxy-project')).toHaveCount(1);
+    await expect(page.locator('.galaxy-project')).toContainText('Notebook from the Valley');
+    await page.getByRole('button', {name:'Previous project group'}).click();
+  }
+  const field = await page.locator('.galaxy-field').boundingBox();
+  await page.mouse.move(field!.x + field!.width / 2, field!.y + 50);
+  const before = await page.evaluate(() => scrollY);
+  await page.mouse.wheel(0, 500);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
 });

@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
-// Runs against whatever the build contains: 5 real projects by default, or N with NEXT_PUBLIC_PORTFOLIO_FIXTURES=N.
-const total = Math.max(5, Number(process.env.NEXT_PUBLIC_PORTFOLIO_FIXTURES || 5));
-const fixtures = total > 5;
+// Runs against whatever the build contains: 6 real projects by default, or N with NEXT_PUBLIC_PORTFOLIO_FIXTURES=N.
+const total = Math.max(6, Number(process.env.NEXT_PUBLIC_PORTFOLIO_FIXTURES || 6));
+const fixtures = total > 6;
 type Box = { x: number; y: number; width: number; height: number };
 const overlap = (a: Box, b: Box) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 const noOverflow = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
@@ -10,7 +10,7 @@ test(`scale: ${total} projects render without overlap or overflow`, async ({ pag
   for (const route of ['/', '/work']) { await page.goto(route); expect(await noOverflow(page)).toBeTruthy(); }
   await page.goto('/work'); await expect(page.locator('.work-tile')).toHaveCount(total);
   await page.goto('/'); await expect(page.locator('.project-chapter')).toHaveCount(total);
-  const nodes = page.locator('.galaxy-project'); await expect(nodes).toHaveCount(Math.min(total, 5));
+  const nodes = page.locator('.galaxy-project'); await expect(nodes).toHaveCount(Math.min(total, isMobile ? 5 : 6));
   await page.emulateMedia({reducedMotion:'reduce'});
   const boxes = await nodes.evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { x:r.x, y:r.y, width:r.width, height:r.height }; }));
   for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) expect(overlap(boxes[i], boxes[j]), `orbit links ${i} and ${j} overlap`).toBeFalsy();

@@ -29,7 +29,7 @@ function Galaxy({ active, compact }: { active: boolean; compact: boolean }) {
     }
     return [positions, colors];
   }, [compact]);
-  useFrame((_, delta) => { if (active && group.current) { const step = Math.min(delta, .05); group.current.rotation.y += step * .018; uniforms.time.value += step; } });
+  useFrame((_, delta) => { if (active && group.current) { const step = Math.min(delta, .05); group.current.rotation.y += step * .0216; uniforms.time.value += step; } });
   return <group rotation={[.55, 0, -.3]}><group ref={group}><points><bufferGeometry><bufferAttribute attach="attributes-position" args={[positions, 3]}/><bufferAttribute attach="attributes-color" args={[colors, 3]}/></bufferGeometry><shaderMaterial transparent depthWrite={false} blending={THREE.AdditiveBlending} vertexColors uniforms={uniforms} vertexShader={`varying vec3 vColor; uniform float pointSize; uniform float time; void main(){ float seed=fract(sin(dot(position.xz,vec2(12.9898,78.233)))*43758.5453); float shimmer=seed>.96 ? .82+.18*sin(time*.8+seed*90.0) : 1.0; vColor=color*shimmer; vec4 mv=modelViewMatrix*vec4(position,1.0); gl_Position=projectionMatrix*mv; gl_PointSize=clamp(pointSize/-mv.z,1.0,5.0); }`} fragmentShader={`varying vec3 vColor; void main(){float d=length(gl_PointCoord-.5); if(d>.5) discard; gl_FragColor=vec4(vColor,pow(1.0-d*2.0,2.0)*.8);}`}/></points></group></group>;
 }
 function ContextRecovery({ onFailure }: { onFailure: () => void }) {

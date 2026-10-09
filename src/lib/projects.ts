@@ -27,6 +27,21 @@ export type NumberedProject = Project & { number: string };
 const github = 'https://github.com/vincentleg';
 const entries: Project[] = [
   {
+    slug: 'escape-room', name: 'ESCAPE ROOM', group: 'AI products & agents', date: '2026-10', featured: true,
+    category: 'AI Security / Cyberdefense', status: 'Hackathon prototype', accent: '#8de9ff',
+    hook: 'Before an AI agent escapes, prove you can contain it.',
+    summary: 'An interactive cyberdefense experience exploring AI-agent containment, security boundaries, and evidence-based incident response. Built during a San Francisco hackathon.',
+    image: '/media/escape-room-home.webp', imageAlt: 'Authentic ESCAPE ROOM homepage with orange highlights and the headline “Before an AI agent escapes, prove you can contain it.”',
+    caption: 'Original project screenshot · Cyberdefense Hackathon, AWS Loft, San Francisco · October 8, 2026.',
+    gallery: [], links: [], stack: ['AI-agent containment', 'Security boundaries', 'Evidence', 'Human oversight'],
+    problem: 'Before trusting an AI agent to act, how can we investigate whether it stays within its security boundaries and respond when those boundaries fail?',
+    decision: 'Make containment, evidence, and human oversight the focus of an interactive security scenario.',
+    approach: 'Built as a hackathon prototype at the AWS Loft in San Francisco on October 8, 2026. The experience challenges participants to investigate and respond to an AI-agent security scenario, with containment and evidence at the center.',
+    next: 'This is an exploratory hackathon prototype, not a commercial production security platform.',
+    flow: [{ title: 'Investigate', text: 'Explore the AI-agent security scenario.' }, { title: 'Contain', text: 'Consider the security boundaries and human oversight needed to respond.' }, { title: 'Examine evidence', text: 'Ask what evidence supports the containment outcome.' }],
+    ledger: [{ capability: 'Interactive cyberdefense experience', status: 'Hackathon prototype', evidence: 'Built by Vincent at the Cyberdefense Hackathon on October 8, 2026, at the AWS Loft in San Francisco.' }, { capability: 'Homepage and containment scenario', status: 'Original screenshot', evidence: 'The supplied capture shows the project homepage and containment chamber. No production security guarantees are claimed.' }]
+  },
+  {
     slug: 'orqo', name: 'ORQO', group: 'AI products & agents', date: '2026-10', featured: true, related: [{ slug: 'handshake', reason: 'Turning a conversation into a concrete next step' }, { slug: 'notebook-from-the-valley', reason: 'Researching companies across the ecosystem' }], category: 'Business intelligence', status: 'In development', accent: '#dba887',
     hook: 'You meet the person. ORQO finds the business.',
     summary: 'A business-development system that researches companies, tests opportunities from both sides, and keeps evidence at the center of the conversation.',
@@ -134,9 +149,9 @@ const fixtureTarget = Number(process.env.NEXT_PUBLIC_PORTFOLIO_FIXTURES || 0);
 const all = fixtureTarget > entries.length ? [...entries, ...fixtureProjects(fixtureTarget - entries.length)] : entries;
 /** Display order: as authored. Numbers are derived, never hand-maintained. */
 export const projects: NumberedProject[] = all.map((p, i) => ({ ...p, number: String(i + 1).padStart(2, '0') }));
-// Authored order sets priority. Keep the orbital navigation capped, not the catalogue.
-export const featuredProjects = projects.filter(p => p.featured);
-export const orbitProjects = featuredProjects.slice(0, 5);
+// Authored order sets priority. The hero progressively explores the complete catalogue.
+export const featuredProjects = projects;
+export const orbitProjects = projects;
 export const groups = [...new Set(projects.map(p => p.group))];
 export const byDate = (order: 'newest' | 'oldest' = 'newest') => [...projects].sort((a, b) => (order === 'newest' ? -1 : 1) * a.date.localeCompare(b.date) || a.number.localeCompare(b.number));
 /** Symmetric, de-duplicated relationship edges between existing projects. */

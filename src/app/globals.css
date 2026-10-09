@@ -131,3 +131,34 @@ em{font-style:italic;letter-spacing:-.02em}h1 em,h2 em{font-size:1.06em}
 @media(max-width:760px){.galaxy-projects:before{inset:16% 14%}}
 @media(hover:none){.planet-preview{display:none}.galaxy-project:active .planet{transform:scale(1.24)}}
 @media(prefers-reduced-motion:reduce){.star-twinkle{animation:none}.galaxy-travel{transform:none!important;opacity:1!important}.journey-track{--journey-progress:1!important}.journey-track li{--node-light:1!important}.pindex-stage,.contact-links a,.contact-links i,.galaxy-projects:before{transition:none}}
+
+/* V6: a restrained hologram and a progressively explored project galaxy. */
+.universe-hero h1{font-size:clamp(54px,5.3vw,84px)}
+.universe-hero h1>span{font-family:var(--font-sans);font-size:.36em;letter-spacing:-.02em;color:#d2ddf1}
+.galaxy-roles{font-size:11px;line-height:1.8;color:#b8ccea;margin:20px 0 0}
+.universe-hero .hero-pretitle{font-size:8px;white-space:normal;line-height:1.8}
+.galaxy-viewport{position:absolute;inset:0 0 11%;overflow:clip;touch-action:pan-y}
+.galaxy-viewport::-webkit-scrollbar{display:none}
+.galaxy-zoom{position:absolute;inset:0;transform-origin:50% 50%}
+.galaxy-project{animation-duration:233s}
+.portrait-mask img{filter:saturate(.88) contrast(1.035)}
+.portrait-mask:after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,#72c8ff18,transparent 45%,#2366bd24);box-shadow:inset 0 0 24px #75c9ff35;mix-blend-mode:soft-light}
+.portrait-halo{border-color:#8fd6ff55;animation:halo-breathe 8s ease-in-out infinite alternate}
+.portrait-halo:after{border-style:solid;border-color:#73adff18;border-top-color:#b1e7ff66}
+@keyframes halo-breathe{from{opacity:.65;transform:scale(.99)}to{opacity:1;transform:scale(1.035)}}
+.galaxy-controls{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:3px;z-index:6;border:1px solid #88baff28;border-radius:24px;padding:2px;background:#091322e8;color:#c4dbff;font:10px var(--font-mono);white-space:nowrap}
+.galaxy-controls button{min-width:40px;min-height:40px;padding:0 9px;border:0;background:transparent;color:inherit;cursor:pointer;border-radius:50%}
+.galaxy-controls button:hover{background:#84baff16}.galaxy-controls button:disabled{opacity:.35;cursor:default}.galaxy-controls button:focus-visible{outline:1px solid #a2d5ff;outline-offset:-2px}.galaxy-controls [role=status]{padding:0 3px}
+.galaxy-caption{bottom:0}
+.shooting-star{position:absolute;width:80px;height:1px;background:linear-gradient(90deg,transparent,#bdedff);box-shadow:0 0 5px #98d9ff77;pointer-events:none;opacity:0;animation:meteor-pass 1.2s ease-out both;transform:rotate(-12deg)}
+@keyframes meteor-pass{0%{opacity:0;transform:translate(-35px,8px) rotate(-12deg)}15%{opacity:.65}100%{opacity:0;transform:translate(110px,-23px) rotate(-12deg)}}
+@keyframes galaxy-appear{from{opacity:0}to{opacity:1}}
+.galaxy-depth{animation:galaxy-appear .65s both}.galaxy-core{animation:galaxy-appear .7s .12s both}.galaxy-projects{animation:galaxy-appear .7s .28s both}
+.universe-hero .hero-copy>*{animation:galaxy-appear .7s .4s both}
+.project-chapters{background:radial-gradient(ellipse at 90% 25%,#2547780b,transparent 45%),radial-gradient(ellipse at 5% 70%,#255ba00b,transparent 40%)}
+.is-paused .portrait-halo,.is-paused .shooting-star{animation-play-state:paused}
+@media(max-width:1100px) and (min-width:761px){.universe-hero h1{font-size:60px}.galaxy-project{width:112px}.universe-hero .hero-pretitle{font-size:7px}}
+@media(max-width:760px){.universe-hero h1{font-size:clamp(46px,12vw,66px)}.galaxy-field{aspect-ratio:.94;margin-top:10px}.galaxy-viewport{inset:0 0 15%}.galaxy-controls{bottom:5%}.galaxy-project{animation:none;width:104px}.planet-label{font-size:9px}.galaxy-caption{font-size:5px}.galaxy-roles{font-size:10px;margin-top:15px}.universe-hero .hero-description{margin-top:15px}}
+@media(prefers-reduced-motion:reduce){.galaxy-depth,.galaxy-core,.galaxy-projects,.portrait-halo,.universe-hero .hero-copy>*{animation:none}.shooting-star{display:none}}
+
+.universe-hero h1>span{display:block;margin-bottom:12px}.universe-hero h1 em{display:block}
