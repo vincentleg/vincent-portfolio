@@ -143,16 +143,11 @@ em{font-style:italic;letter-spacing:-.02em}h1 em,h2 em{font-size:1.06em}
 .galaxy-project{animation-duration:233s}
 .galaxy-core{z-index:4}
 .portrait-mask{pointer-events:auto;cursor:pointer;isolation:isolate;background:#071e3b;border-color:#70d7ff99;box-shadow:0 0 22px #1aa8ff55,0 0 58px #087cff38;transition:box-shadow .3s,border-color .3s}
-.portrait-mask img{filter:grayscale(1) sepia(1) saturate(2.2) hue-rotate(165deg) brightness(.86) contrast(1.12);mask-image:radial-gradient(ellipse at 50% 43%,#000 40%,#000b 67%,transparent 100%)}
-.portrait-mask:before{content:'';position:absolute;inset:-50%;z-index:1;pointer-events:none;background:linear-gradient(115deg,transparent 42%,#b4efff1c 49%,#dcfaff2b 50%,transparent 58%);transform:translateX(-65%);animation:portrait-shimmer 9s ease-in-out infinite}
 .portrait-mask:hover,.portrait-mask:focus-visible{border-color:#a5ecff;box-shadow:0 0 28px #30bfff80,0 0 70px #087cff50}
 .portrait-mask:focus-visible{outline:2px solid #b5f0ff;outline-offset:5px}
 .portrait-link-hint{position:absolute;z-index:2;bottom:12%;left:50%;transform:translate(-50%,4px);white-space:nowrap;padding:5px 9px;border:1px solid #79d9ff66;border-radius:20px;background:#06182ded;color:#d5f6ff;font:9px var(--font-mono);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
 .portrait-mask:hover .portrait-link-hint,.portrait-mask:focus-visible .portrait-link-hint{opacity:1;transform:translate(-50%,0)}
-@keyframes portrait-shimmer{0%,65%{transform:translateX(-65%);opacity:0}70%{opacity:.7}95%,100%{transform:translateX(65%);opacity:0}}
-.is-paused .portrait-mask:before{animation-play-state:paused}
-@media(prefers-reduced-motion:reduce){.portrait-mask:before{animation:none;opacity:0}.portrait-mask,.portrait-link-hint{transition:none}}
-.portrait-mask:after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(105deg,#35bfff33,transparent 32% 67%,#529dff40);box-shadow:inset 3px 0 17px #73e4ff55,inset -4px 0 20px #348dff66,inset 0 -12px 28px #04152dd9;mix-blend-mode:normal}
+@media(prefers-reduced-motion:reduce){.portrait-mask,.portrait-link-hint{transition:none}}
 .portrait-halo{border-color:#65cdff88;box-shadow:0 0 32px #168bff55,inset 0 0 26px #42baff33;animation:halo-breathe 8s ease-in-out infinite alternate}
 .portrait-halo:after{border-style:solid;border-color:#73adff18;border-top-color:#b1e7ff66}
 @keyframes halo-breathe{from{opacity:.65;transform:scale(.99)}to{opacity:1;transform:scale(1.035)}}
