@@ -10,7 +10,7 @@ test(`scale: ${total} projects render without overlap or overflow`, async ({ pag
   for (const route of ['/', '/work']) { await page.goto(route); expect(await noOverflow(page)).toBeTruthy(); }
   await page.goto('/work'); await expect(page.locator('.work-tile')).toHaveCount(total);
   await page.goto('/'); await expect(page.locator('.project-chapter')).toHaveCount(total);
-  const nodes = page.locator('.galaxy-project'); await expect(nodes).toHaveCount(Math.min(total, isMobile ? 5 : 6));
+  const nodes = page.locator('.galaxy-project'); await expect(nodes).toHaveCount(total);
   await page.emulateMedia({reducedMotion:'reduce'});
   const boxes = await nodes.evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return { x:r.x, y:r.y, width:r.width, height:r.height }; }));
   for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) expect(overlap(boxes[i], boxes[j]), `orbit links ${i} and ${j} overlap`).toBeFalsy();

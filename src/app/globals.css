@@ -167,3 +167,32 @@ em{font-style:italic;letter-spacing:-.02em}h1 em,h2 em{font-size:1.06em}
 @media(prefers-reduced-motion:reduce){.galaxy-depth,.galaxy-core,.galaxy-projects,.portrait-halo,.universe-hero .hero-copy>*{animation:none}.shooting-star{display:none}}
 
 .universe-hero h1>span{display:block;margin-bottom:12px}.universe-hero h1 em{display:block}
+
+/* V7: a larger orbital coordinate system and an unscaled preview layer. */
+.galaxy-viewport{z-index:1}
+.galaxy-projects{z-index:5;pointer-events:none}
+.galaxy-project{pointer-events:auto;offset-path:ellipse(var(--orbit-x,39%) var(--orbit-y,33%) at 50% 50%);animation-duration:var(--orbit-duration,233s);transform:scale(var(--node-scale,1))}
+.orbits-frozen .galaxy-project,.orbits-frozen .future-planet{animation-play-state:paused}
+.future-orbits,.future-planets{position:absolute;inset:0;pointer-events:none}
+.future-orbits{z-index:1}.future-planets{z-index:3}
+.future-orbits>span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid #8198c5;border-radius:50%}
+.future-planet{position:absolute;left:0;top:0;width:36px;height:36px;display:grid;place-items:center;padding:0;background:none;border:0;color:#aebfda;cursor:pointer;pointer-events:auto;offset-path:ellipse(var(--orbit-x) var(--orbit-y) at 50% 50%);offset-distance:var(--phase);offset-rotate:0deg;animation:project-orbit var(--orbit-duration) linear infinite;transform:scale(var(--future-scale,1));border-radius:50%}
+.future-planet .planet{width:var(--planet-size);height:var(--planet-size);opacity:.78;box-shadow:0 0 9px color-mix(in srgb,var(--project-accent) 16%,transparent)}
+.future-hint{position:absolute;top:100%;font:8px var(--font-mono);white-space:nowrap;opacity:0;pointer-events:none}
+.future-planet:is(:hover,:focus-visible) .future-hint{opacity:1}.future-planet:focus-visible{outline:1px solid #aecbfa;outline-offset:2px}
+.future-planets:has(button:is(:hover,:focus-visible)) button{animation-play-state:paused}
+.galaxy-zoom[data-overview=true] .galaxy-project{width:32px;height:32px;justify-content:center;transform:scale(var(--future-scale))}
+.galaxy-zoom[data-overview=true] .galaxy-project .planet{width:16px;height:16px}
+.galaxy-zoom[data-overview=true] .planet-label,.galaxy-zoom[data-overview=true] .core-name{display:none}
+.galaxy-preview{display:block;z-index:8;max-width:none;bottom:auto;opacity:1;visibility:visible;pointer-events:auto;transform:none;animation:preview-enter .25s ease-out both}
+.preview-actions{display:flex;align-items:center;justify-content:space-between;margin-top:4px;font:10px var(--font-mono)}
+.preview-actions a,.preview-actions button{display:flex;align-items:center;min-height:36px;color:#c7dcff}.preview-actions button{background:none;border:0;cursor:pointer;font-size:20px;min-width:36px;justify-content:center}
+.preview-actions :focus-visible{outline:1px solid #aecbfa;outline-offset:2px}
+@keyframes preview-enter{from{opacity:0;transform:translateY(10px) rotateX(8deg)}to{opacity:1;transform:none}}
+.galaxy-controls{z-index:10;gap:9px;padding:2px 12px;max-width:calc(100% - 24px)}
+.galaxy-controls input{width:clamp(100px,17cqw,170px);height:40px;margin:0;accent-color:#9bc8ff;cursor:ew-resize;touch-action:pan-y}
+.galaxy-controls input:focus-visible{outline:1px solid #b9dcff;outline-offset:2px;border-radius:6px}
+.galaxy-controls output{min-width:34px;text-align:right;font-variant-numeric:tabular-nums}
+.galaxy-controls button{min-width:32px;padding:0 4px}
+@media(max-width:760px){.galaxy-project{--orbit-x:36%;--orbit-y:34%;width:88px}.galaxy-preview{display:block}.galaxy-controls{gap:7px}.galaxy-controls input{width:110px}}
+@media(prefers-reduced-motion:reduce){.future-planet,.galaxy-preview{animation:none}}
