@@ -50,24 +50,24 @@ const entries: Project[] = [
   },
   {
     slug: 'plot-twist', name: 'PLOT TWIST', group: 'AI products & agents', date: '2026-10', featured: true, related: [{ slug: 'intent-firewall', reason: 'The model proposes; code authorizes' }],
-    category: 'AI Trust / Decision Intelligence', status: 'Hackathon prototype · local demo', accent: '#3fd0c0',
+    category: 'AI Trust / Decision Intelligence', status: 'Live demo · hackathon prototype', accent: '#3fd0c0',
     hook: 'AI answers need evidence before they become decisions.',
     summary: 'An evidence-aware AI decision workspace. It turns trust-analysis reports into an interactive 3D environment where an agent maps claims, evidence, risks, and permitted actions. A server-side gateway decides whether the final document can be approved or must remain a qualified draft.',
     image: '/media/plot-twist-home.webp', imageAlt: 'Authentic PLOT TWIST interface showing the 3D Trame environment, the Scout agent on standby, permit states, and the closed final-document gateway.',
     caption: 'Original interface screenshot · Decision-Grade AI hackathon, Stanford · October 2026. Recorded analysis with live permission checks.',
-    gallery: [], links: [{ label: 'Explore the repository', href: `${github}/plot-twist`, kind: 'repo' }],
+    gallery: [], links: [{ label: 'Open live demo', href: 'https://plot-twist-pink.vercel.app/', kind: 'demo' }, { label: 'Explore the repository', href: `${github}/plot-twist`, kind: 'repo' }],
     stack: ['Ezio reports', 'TokenRouter', 'Keenable search', 'Server-side permits'],
     problem: 'A fluent AI answer, or a single global trust score, is not enough to act on. A decision needs to know which claims are supported, which evidence they depend on, and what is still unknown.',
     decision: 'The model proposes; the code authorizes. Every action holds a server permit tied to explicit claims and excerpts, and the final document is released only when the server re-evaluates the exact note.',
     approach: 'An Ezio trust-analysis report is imported with a declared use. The analysis extracts claims, excerpts checked against the original text, issues, and use risk. Scout explores the Trame, a 3D world where each action is ACTIVE, SUSPENDED, BLOCKED, or NEEDS_HUMAN. A research loop uses Keenable search and TokenRouter models, and the server checks that quoted evidence appears in the fetched text. Contradictions escalate to human review. The gateway outputs a final document only when finalization is ACTIVE; otherwise it produces a labeled draft, refusal report, or question for a human.',
-    next: 'Server checks bound the model’s work but do not establish factual truth: excerpt provenance is not verification. This is a hackathon prototype run locally as a single process, demonstrated through a guided recorded analysis.',
+    next: 'Server checks bound the model’s work but do not establish factual truth: excerpt provenance is not verification. This is a single-process hackathon prototype, demonstrated through a guided recorded analysis.',
     flow: [{ title: 'Import', text: 'Load an Ezio trust-analysis report and declare how it will be used.' }, { title: 'Map', text: 'Extract claims, excerpts, issues, and risks into the 3D Trame.' }, { title: 'Permit', text: 'Grant each action an evidence-linked permit: active, suspended, blocked, or needs human.' }, { title: 'Finalize', text: 'The server gateway approves a final document or keeps it a qualified draft.' }],
     ledger: [
       { capability: '3D Trame and Scout agent', status: 'Original screenshot', evidence: 'The supplied capture shows the Trame, Scout on standby, and the four permit states.' },
       { capability: 'Evidence-linked permits and finalization gateway', status: 'Documented implementation', evidence: 'README documents the permit policy and a POST /finalize that re-evaluates the exact note on the server.', href: `${github}/plot-twist#what-the-engine-does` },
       { capability: 'Human review and escalation', status: 'Documented implementation', evidence: 'Contradicting evidence escalates to NEEDS_HUMAN and is never auto-resolved.', href: `${github}/plot-twist#what-the-engine-does` },
       { capability: 'Ezio, TokenRouter, and Keenable', status: 'Integrated', evidence: 'README lists the sponsors used: real Ezio exports as input, TokenRouter analysis calls, and Keenable search.', href: `${github}/plot-twist#sponsors-actually-used` },
-      { capability: 'Factual truth and public deployment', status: 'Not claimed', evidence: 'Checks bound the model but do not prove truth. The demo runs locally; there is no public deployment.', href: `${github}/plot-twist#limits` }
+      { capability: 'Factual truth', status: 'Not claimed', evidence: 'Checks bound the model but do not prove truth.', href: `${github}/plot-twist#limits` }
     ]
   },
   {
@@ -77,7 +77,7 @@ const entries: Project[] = [
     summary: 'An interactive cyberdefense experience exploring AI-agent containment, security boundaries, and evidence-based incident response. Built during a San Francisco hackathon.',
     image: '/media/escape-room-home.webp', imageAlt: 'Authentic ESCAPE ROOM homepage with orange highlights and the headline “Before an AI agent escapes, prove you can contain it.”',
     caption: 'Original project screenshot · Cyberdefense Hackathon, AWS Loft, San Francisco · October 8, 2026.',
-    gallery: [], links: [], stack: ['AI-agent containment', 'Security boundaries', 'Evidence', 'Human oversight'],
+    gallery: [], links: [{ label: 'Open live demo', href: 'https://escape-room-xi-jade.vercel.app/', kind: 'demo' }], stack: ['AI-agent containment', 'Security boundaries', 'Evidence', 'Human oversight'],
     problem: 'Before trusting an AI agent to act, how can we investigate whether it stays within its security boundaries and respond when those boundaries fail?',
     decision: 'Make containment, evidence, and human oversight the focus of an interactive security scenario.',
     approach: 'Built as a hackathon prototype at the AWS Loft in San Francisco on October 8, 2026. The experience challenges participants to investigate and respond to an AI-agent security scenario, with containment and evidence at the center.',
@@ -201,6 +201,13 @@ export const byDate = (order: 'newest' | 'oldest' = 'newest') => [...projects].s
 /** Symmetric, de-duplicated relationship edges between existing projects. */
 export const relations = (() => { const seen = new Map<string, { a: string; b: string; reason: string }>(); for (const p of projects) for (const r of p.related ?? []) { if (!projects.some(q => q.slug === r.slug)) continue; const key = [p.slug, r.slug].sort().join('|'); if (!seen.has(key)) seen.set(key, { a: p.slug, b: r.slug, reason: r.reason }); } return [...seen.values()]; })();
 export const relationsOf = (slug: string) => relations.filter(r => r.a === slug || r.b === slug).map(r => ({ slug: r.a === slug ? r.b : r.a, reason: r.reason }));
+/** Where "View project" goes: the live site when confirmed, otherwise GitHub. Never a screenshot. */
+export const projectDestination = (p: Project) => {
+  const live = p.links.find(l => l.kind === 'demo' || l.kind === 'publication');
+  if (live) return { href: live.href, label: 'View project' };
+  const repo = p.links.find(l => l.kind === 'repo');
+  return repo ? { href: repo.href, label: 'View on GitHub' } : null;
+};
 export const projectBySlug = (slug: string) => projects.find(project => project.slug === slug);
 // Production uses the public project domain; per-deployment URLs sit behind Vercel's deployment protection.
 const vercelHost = process.env.VERCEL_ENV === 'production' && process.env.VERCEL_PROJECT_PRODUCTION_URL ? process.env.VERCEL_PROJECT_PRODUCTION_URL : process.env.VERCEL_URL;

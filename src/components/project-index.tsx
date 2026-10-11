@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
-import type { NumberedProject } from '@/lib/projects';
+import { projectDestination, type NumberedProject } from '@/lib/projects';
 import { ProjectVisual } from './project-visual';
 
 // Homepage overview: every featured project visible at once, one preview stage, one link per project.
@@ -15,15 +15,15 @@ export function ProjectIndex({ items, total }: { items: NumberedProject[]; total
     </div>
     <div className="pindex-layout">
       <ol className="pindex-list">
-        {items.map((p, i) => <li key={p.slug} style={{ '--project-accent': p.accent } as React.CSSProperties}>
-          <Link href={`#project-${p.slug}`} className={`pindex-row ${i === active ? 'on' : ''}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)}>
+        {items.map((p, i) => { const dest = projectDestination(p); return <li key={p.slug} style={{ '--project-accent': p.accent } as React.CSSProperties}>
+          <Link href={dest?.href ?? `#project-${p.slug}`} {...dest && { target: '_blank', rel: 'noopener noreferrer', 'aria-label': `${p.name}: ${dest.label} (opens in a new tab)`, title: dest.label }} className={`pindex-row ${i === active ? 'on' : ''}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)}>
             <span className="pindex-num">{p.number}</span>
             <span className="pindex-main"><span className="pindex-name">{p.name}</span><span className="pindex-hook">{p.hook}</span></span>
             <span className="pindex-cat">{p.category}<small>{p.status}</small></span>
             <span className="pindex-thumb" aria-hidden="true"><ProjectVisual project={p} sizes="90vw"/></span>
             <span className="pindex-go" aria-hidden="true">↗</span>
           </Link>
-        </li>)}
+        </li>; })}
       </ol>
       <div className="pindex-stage" aria-hidden="true">
         {items.map((p, i) => <div key={p.slug} className={`pindex-slide ${i === active ? 'on' : ''}`} style={{ '--project-accent': p.accent } as React.CSSProperties}>

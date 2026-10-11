@@ -16,11 +16,11 @@ test('all routes, real media, metadata, and responsive containment', async ({pag
 test('one-page navigation, project previews, details and contact', async ({page, isMobile}) => {
   await page.goto('/');
   await page.getByRole('link',{name:'Explore what I’m building'}).click(); await expect(page).toHaveURL(/#work/);
-  await page.locator('.pindex-row').filter({hasText:'ORQO'}).click(); await expect(page).toHaveURL(/#project-orqo/);
+  await expect(page.locator('.pindex-row').filter({hasText:'ORQO'})).toHaveAttribute('href', 'https://github.com/vincentleg/ORQO'); await expect(page.locator('.pindex-row').filter({hasText:'RED QUEEN'})).toHaveAttribute('target', '_blank');
   await page.locator('#project-orqo summary').click(); await expect(page.locator('#project-orqo .chapter-ledger')).toBeVisible();
   await page.goto('/');
   const node = page.locator('.galaxy-project').filter({hasText:'Handshake'}); await node.focus();
-  if (!isMobile) await expect(node.locator('.planet-preview')).toBeVisible();
+  if (!isMobile) await expect(page.locator('.galaxy-preview')).toBeVisible();
   await node.press('Enter'); await expect(page).toHaveURL(/#project-handshake/);
   await page.getByRole('link',{name:'Journey',exact:true}).click(); await expect(page).toHaveURL(/#journey/);
   await page.getByRole('link',{name:'Contact',exact:true}).click();
@@ -103,5 +103,5 @@ test('existing preview transitions and project card depth remain interactive', a
   await expect(card.locator('.pv')).toHaveCSS('transform', 'none');
   await card.hover();
   await expect(card.locator('.pv')).not.toHaveCSS('transform', 'none');
-  await expect(card).toHaveAttribute('href', '/media/orqo-homepage.webp');
+  await expect(card).toHaveAttribute('href', 'https://github.com/vincentleg/ORQO'); await expect(page.locator('#project-red-queen .work-tile-visual')).toHaveAttribute('href', 'https://red-queen-ten.vercel.app/');
 });

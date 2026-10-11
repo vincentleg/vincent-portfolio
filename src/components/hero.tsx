@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import portrait from '../../public/media/vincent-portrait.png';
 import { Component, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import { orbitProjects } from '@/lib/projects';
+import { orbitProjects, projectDestination } from '@/lib/projects';
 import { futurePlanetSlots, outerOrbits, projectOrbit } from '@/lib/galaxy-layout';
 import { ProjectVisual } from './project-visual';
 const OrbitalScene = dynamic(() => import('./orbital-scene'), { ssr: false });
@@ -125,7 +125,7 @@ export function Hero() {
       {highlighted !== null && <div ref={preview} id="galaxy-project-preview" className="planet-preview galaxy-preview" style={{ left: previewPosition.x, top: previewPosition.y, width: previewPosition.width, '--project-accent': orbitProjects[highlighted].accent } as CSSProperties} onMouseEnter={keepPreview} onMouseLeave={() => { if (!touchInput.current) scheduleClose(); }} onFocus={keepPreview} onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget as Node)) scheduleClose(); }}>
         <ProjectVisual project={orbitProjects[highlighted]} sizes="220px"/>
         <span>{orbitProjects[highlighted].name} · {orbitProjects[highlighted].status}</span>
-        <div className="preview-actions"><a href={`#project-${orbitProjects[highlighted].slug}`} onClick={closePreview}>View project ↗</a><button type="button" aria-label="Close project preview" onClick={closePreview}>×</button></div>
+        <div className="preview-actions">{(dest => dest ? <a href={dest.href} target="_blank" rel="noopener noreferrer" onClick={closePreview}>{dest.label} ↗</a> : <a href={`#project-${orbitProjects[highlighted].slug}`} onClick={closePreview}>View project ↗</a>)(projectDestination(orbitProjects[highlighted]))}<button type="button" aria-label="Close project preview" onClick={closePreview}>×</button></div>
       </div>}
       <div className="galaxy-controls" role="group" aria-label="Galaxy controls"><span aria-hidden="true">−</span><input type="range" min="25" max="150" step="1" value={Math.round(zoom * 100)} aria-label="Galaxy zoom" aria-valuetext={`${Math.round(zoom * 100)} percent`} onChange={e => changeZoom(Number(e.target.value) / 100)}/><span aria-hidden="true">+</span><output>{Math.round(zoom * 100)}%</output><button type="button" aria-label="Reset galaxy zoom to 100 percent" onClick={() => changeZoom(1)}>↺</button></div>
       <p className="galaxy-caption">ONE PERSON. A UNIVERSE OF POSSIBILITIES.</p>
