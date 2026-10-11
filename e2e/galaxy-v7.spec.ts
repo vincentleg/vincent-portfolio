@@ -10,14 +10,14 @@ test('V7 galaxy: spatial zoom, previews, LinkedIn and scrolling', async ({ page,
   const area = page.locator('.galaxy-viewport');
   await area.scrollIntoViewIfNeeded();
   const nodes = page.locator('.galaxy-project');
-  await expect(nodes).toHaveCount(6);
-  await expect(page.locator('.future-planet')).toHaveCount(15);
-  await expect(page.locator('.project-chapter')).toHaveCount(6);
+  await expect(nodes).toHaveCount(8);
+  await expect(page.locator('.future-planet')).toHaveCount(13);
+  await expect(page.locator('.project-chapter')).toHaveCount(8);
   await expect(page.locator('.future-planet a, .future-planet img')).toHaveCount(0);
   const slider = page.getByRole('slider', { name: 'Galaxy zoom' });
   await expect(slider).toHaveValue('100');
   const realPositions = await nodes.evaluateAll(elements => elements.map(e => { const r = e.getBoundingClientRect(); return [r.x, r.y]; }));
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 8; i++) {
     const node = nodes.nth(i);
     if (isMobile) await node.tap(); else await node.hover();
     const preview = page.locator('.galaxy-preview');
@@ -39,7 +39,7 @@ test('V7 galaxy: spatial zoom, previews, LinkedIn and scrolling', async ({ page,
   await expect(page.locator('.galaxy-preview')).toBeVisible();
   await page.keyboard.press('Escape');
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/#project-escape-room/);
+  await expect(page).toHaveURL(/#project-red-queen/);
   await slider.scrollIntoViewIfNeeded();
   await slider.focus();
   await page.keyboard.press('Home');

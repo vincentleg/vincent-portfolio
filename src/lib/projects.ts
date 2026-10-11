@@ -27,6 +27,50 @@ export type NumberedProject = Project & { number: string };
 const github = 'https://github.com/vincentleg';
 const entries: Project[] = [
   {
+    slug: 'red-queen', name: 'RED QUEEN', group: 'AI products & agents', date: '2026-10', featured: true, related: [{ slug: 'escape-room', reason: 'Recovery that has to prove itself' }],
+    category: 'AI Agents / Harness Engineering', status: 'Live demo · hackathon prototype', accent: '#d65468',
+    hook: 'Every fix must survive its own attack.',
+    summary: 'A counterexample-guided evolution chamber for AI-agent recovery policies. It tests candidate strategies against simulated payment failures, exposes counterexamples, and promotes only policies that pass bounded verification.',
+    image: '/media/red-queen-home.webp', imageAlt: 'Authentic RED QUEEN homepage with the headline “The Evolution Chamber”, the tagline “Every fix must survive its own attack.” and a crimson recovery-genome helix.',
+    caption: 'Live-site homepage · Harness Engineering & Model Wrangling hackathon, SF Tech Week · October 2026. Payments are simulated.',
+    gallery: [], links: [{ label: 'Open live demo', href: 'https://red-queen-ten.vercel.app/', kind: 'demo' }, { label: 'Explore the repository', href: `${github}/red-queen`, kind: 'repo' }],
+    stack: ['Next.js', 'MongoDB Atlas', 'Zod policy interpreter', 'Bounded verifier'],
+    problem: 'An agent that retries a failed payment can fix one failure and create a worse one: a duplicate charge, a false success, or a loop that never ends. A recovery policy that looks reasonable is not the same as one that survives the failures it will actually meet.',
+    decision: 'Attack every candidate fix before trusting it. A verifier searches for counterexamples, each failure guides the next mutation, and a policy is promoted only when it passes the complete bounded suite.',
+    approach: 'A simulated payment provider models a ledger, durable idempotency keys, and timeouts before or after a charge commits. A strict Zod-validated interpreter runs each policy without executing generated code. An independent verifier enumerates 54 scenarios per policy and checks ledger safety, truthful success, and bounded termination. A blind-retry baseline fails on duplicate charges; reconciliation exposes stale reads; stable idempotency survives. Runs, policies, counterexamples, events, and lineage persist in MongoDB Atlas. Optional AI mode asks a model to propose policies; without it, a deterministic mutation is used and labeled as such.',
+    next: 'Passing the bounded scenarios is not a universal safety guarantee. Concurrent orders, key expiry, provider corruption, and real payment integrations remain outside the model.',
+    flow: [{ title: 'Propose', text: 'Start from a candidate recovery policy, beginning with a blind-retry baseline.' }, { title: 'Attack', text: 'Enumerate 54 simulated failure scenarios and search for a counterexample.' }, { title: 'Mutate', text: 'Use the counterexample trace to guide the next generation of the policy.' }, { title: 'Promote', text: 'Promote only a policy that passes the complete bounded suite, and persist the evidence.' }],
+    ledger: [
+      { capability: 'Interactive Evolution Chamber', status: 'Live demo', evidence: 'The public site serves the chamber; BEGIN EVOLUTION starts a real bounded run.', href: 'https://red-queen-ten.vercel.app/' },
+      { capability: 'Bounded verification across 54 scenarios', status: 'Documented implementation', evidence: 'README documents the independent verifier and its bounds: one order, at most three attempts and three injected faults.', href: `${github}/red-queen#the-real-engine` },
+      { capability: 'MongoDB Atlas experiment persistence', status: 'Documented implementation', evidence: 'Runs, policies, counterexamples, events, and lineage are stored and restored on reload.', href: `${github}/red-queen#persistence-and-ui` },
+      { capability: 'Payment failures', status: 'Simulated', evidence: 'No real charges are made. The provider, ledger, and faults are simulated.', href: `${github}/red-queen#the-real-engine` },
+      { capability: 'AI-generated policy proposals', status: 'Optional / configuration dependent', evidence: 'Enabled only with a model key. Otherwise candidates come from a deterministic mutation labeled “DETERMINISTIC FALLBACK · NOT AI”; the captured homepage shows “AI not configured”.', href: `${github}/red-queen#ai-driven-evolution` }
+    ]
+  },
+  {
+    slug: 'plot-twist', name: 'PLOT TWIST', group: 'AI products & agents', date: '2026-10', featured: true, related: [{ slug: 'intent-firewall', reason: 'The model proposes; code authorizes' }],
+    category: 'AI Trust / Decision Intelligence', status: 'Hackathon prototype · local demo', accent: '#3fd0c0',
+    hook: 'AI answers need evidence before they become decisions.',
+    summary: 'An evidence-aware AI decision workspace. It turns trust-analysis reports into an interactive 3D environment where an agent maps claims, evidence, risks, and permitted actions. A server-side gateway decides whether the final document can be approved or must remain a qualified draft.',
+    image: '/media/plot-twist-home.webp', imageAlt: 'Authentic PLOT TWIST interface showing the 3D Trame environment, the Scout agent on standby, permit states, and the closed final-document gateway.',
+    caption: 'Original interface screenshot · Decision-Grade AI hackathon, Stanford · October 2026. Recorded analysis with live permission checks.',
+    gallery: [], links: [{ label: 'Explore the repository', href: `${github}/plot-twist`, kind: 'repo' }],
+    stack: ['Ezio reports', 'TokenRouter', 'Keenable search', 'Server-side permits'],
+    problem: 'A fluent AI answer, or a single global trust score, is not enough to act on. A decision needs to know which claims are supported, which evidence they depend on, and what is still unknown.',
+    decision: 'The model proposes; the code authorizes. Every action holds a server permit tied to explicit claims and excerpts, and the final document is released only when the server re-evaluates the exact note.',
+    approach: 'An Ezio trust-analysis report is imported with a declared use. The analysis extracts claims, excerpts checked against the original text, issues, and use risk. Scout explores the Trame, a 3D world where each action is ACTIVE, SUSPENDED, BLOCKED, or NEEDS_HUMAN. A research loop uses Keenable search and TokenRouter models, and the server checks that quoted evidence appears in the fetched text. Contradictions escalate to human review. The gateway outputs a final document only when finalization is ACTIVE; otherwise it produces a labeled draft, refusal report, or question for a human.',
+    next: 'Server checks bound the model’s work but do not establish factual truth: excerpt provenance is not verification. This is a hackathon prototype run locally as a single process, demonstrated through a guided recorded analysis.',
+    flow: [{ title: 'Import', text: 'Load an Ezio trust-analysis report and declare how it will be used.' }, { title: 'Map', text: 'Extract claims, excerpts, issues, and risks into the 3D Trame.' }, { title: 'Permit', text: 'Grant each action an evidence-linked permit: active, suspended, blocked, or needs human.' }, { title: 'Finalize', text: 'The server gateway approves a final document or keeps it a qualified draft.' }],
+    ledger: [
+      { capability: '3D Trame and Scout agent', status: 'Original screenshot', evidence: 'The supplied capture shows the Trame, Scout on standby, and the four permit states.' },
+      { capability: 'Evidence-linked permits and finalization gateway', status: 'Documented implementation', evidence: 'README documents the permit policy and a POST /finalize that re-evaluates the exact note on the server.', href: `${github}/plot-twist#what-the-engine-does` },
+      { capability: 'Human review and escalation', status: 'Documented implementation', evidence: 'Contradicting evidence escalates to NEEDS_HUMAN and is never auto-resolved.', href: `${github}/plot-twist#what-the-engine-does` },
+      { capability: 'Ezio, TokenRouter, and Keenable', status: 'Integrated', evidence: 'README lists the sponsors used: real Ezio exports as input, TokenRouter analysis calls, and Keenable search.', href: `${github}/plot-twist#sponsors-actually-used` },
+      { capability: 'Factual truth and public deployment', status: 'Not claimed', evidence: 'Checks bound the model but do not prove truth. The demo runs locally; there is no public deployment.', href: `${github}/plot-twist#limits` }
+    ]
+  },
+  {
     slug: 'escape-room', name: 'ESCAPE ROOM', group: 'AI products & agents', date: '2026-10', featured: true,
     category: 'AI Security / Cyberdefense', status: 'Hackathon prototype', accent: '#8de9ff',
     hook: 'Before an AI agent escapes, prove you can contain it.',

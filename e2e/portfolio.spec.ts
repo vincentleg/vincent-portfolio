@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-const routes = ['/', '/work', '/work/orqo', '/work/escape-room', '/work/intent-firewall', '/work/handshake', '/work/steward', '/work/notebook-from-the-valley', '/about'];
+const routes = ['/', '/work', '/work/red-queen', '/work/plot-twist', '/work/orqo', '/work/escape-room', '/work/intent-firewall', '/work/handshake', '/work/steward', '/work/notebook-from-the-valley', '/about'];
 test('all routes, real media, metadata, and responsive containment', async ({page}) => {
   const errors:string[] = []; page.on('pageerror',error => errors.push(error.message));
   for (const route of routes) {
@@ -40,7 +40,7 @@ test('reduced motion is static and accessible', async ({page}) => {
 });
 test('all six projects retain real media, links and honest status on the homepage', async ({page}) => {
   await page.goto('/');
-  await expect(page.locator('.project-chapter')).toHaveCount(6);
+  await expect(page.locator('.project-chapter')).toHaveCount(8);
   for (const chapter of await page.locator('.project-chapter').all()) {
     await expect(chapter.locator('.project-status')).not.toBeEmpty();
     await expect(chapter.locator('.work-tile-visual img')).toHaveCount(1);
@@ -87,7 +87,7 @@ test('galaxy renders without console errors and compact layouts stay contained',
   for (const width of [320, 768, 1024]) {
     await page.setViewportSize({width, height:800});
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-    await expect(page.locator('.galaxy-project')).toHaveCount(6);
+    await expect(page.locator('.galaxy-project')).toHaveCount(8);
   }
   expect(errors).toEqual([]);
 });

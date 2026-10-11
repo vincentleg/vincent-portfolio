@@ -8,3 +8,5 @@ scripts
 .env*
 
 **/.DS_Store
+# Raw screenshots dropped in for review; only optimized derivatives are published.
+public/media/Capture*
