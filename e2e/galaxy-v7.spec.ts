@@ -10,9 +10,9 @@ test('V7 galaxy: spatial zoom, previews, LinkedIn and scrolling', async ({ page,
   const area = page.locator('.galaxy-viewport');
   await area.scrollIntoViewIfNeeded();
   const nodes = page.locator('.galaxy-project');
-  await expect(nodes).toHaveCount(8);
-  await expect(page.locator('.future-planet')).toHaveCount(13);
-  await expect(page.locator('.project-chapter')).toHaveCount(8);
+  await expect(nodes).toHaveCount(9);
+  await expect(page.locator('.future-planet')).toHaveCount(12);
+  await expect(page.locator('.project-chapter')).toHaveCount(9);
   await expect(page.locator('.future-planet a, .future-planet img')).toHaveCount(0);
   const slider = page.getByRole('slider', { name: 'Galaxy zoom' });
   await expect(slider).toHaveValue('100');

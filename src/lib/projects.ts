@@ -1,5 +1,5 @@
 import { fixtureProjects } from './fixtures';
-export type ProjectGroup = 'AI products & agents' | 'Media & writing' | 'Infrastructure';
+export type ProjectGroup = 'AI products & agents' | 'Media & writing' | 'Infrastructure' | 'Web & commerce';
 export type Relation = { slug: string; reason: string };
 export type Project = {
   slug: string; name: string; category: string; status: string; accent: string;
@@ -186,6 +186,30 @@ const entries: Project[] = [
       { capability: 'Awards, press credentials and partnerships', status: 'Not claimed', evidence: 'None are presented here. Articles describe events attended, not formal affiliations.' }
     ],
     copy: { problemTitle: ['The story behind', 'the headlines.'], approachLabel: 'THE EDITORIAL DECISION', approachTitle: ['Report from', 'inside the ecosystem.'], methodTitle: 'Editorial approach', stackLabel: 'FORMAT', workflowTitle: 'From the room to the page.', nextTitle: ['Keep listening.', 'Keep writing.'] }
+  },
+  {
+    slug: 'wines-horizon', name: 'Wines Horizon', group: 'Web & commerce', date: '2026-10', featured: true,
+    category: 'Wine trade & export', status: 'Live site · access code', accent: '#c79a4a',
+    hook: 'Living terroirs. New horizons.',
+    summary: 'Redesign of a wine trading and export website: premium visual identity, bilingual catalogue, administration of estates and cuvées, and generation of internal draft quotes.',
+    image: '/media/wines-horizon-home.webp', imageAlt: 'Authentic Wines Horizon homepage: a full-screen vineyard village photograph, the gold Wines Horizon logo, and the headline “Des terroirs vivants. De nouveaux horizons.”',
+    caption: 'Live-site homepage, captured after full load · Hostinger · October 12, 2026. The site requires an access code.',
+    gallery: [], links: [{ label: 'View the site', href: 'https://coral-owl-986439.hostingersite.com/', kind: 'demo' }, { label: 'GitHub', href: `${github}/wines-horizon`, kind: 'repo' }],
+    stack: ['React', 'TypeScript', 'PHP', 'SQLite'],
+    problem: 'A wine merchant presents family estates to importers and trade buyers. The catalogue, the photography and every commercial request need to feel premium in two languages, while prices and trade conditions stay private.',
+    decision: 'Separate what visitors see from what the business manages. The public site is an immersive bilingual brochure with a selection and request flow; prices, conditions and quote documents live only in an authenticated administration.',
+    approach: 'A React and TypeScript front end renders a French and English catalogue of estates, cuvées and their variants (vintage, format, label), with full-screen photography. Visitors build a selection with quantities and submit a commercial request; prices are never shown publicly. A PHP and SQLite back end on Hostinger records each request and generates an internal draft-quote PDF intended for Wines Horizon, recalculated as a new version without overwriting earlier ones. The administration manages estates, cuvées, site pages, media and variant pricing with draft and publish states, keeps a full content history with compare and restore, and produces verified backups of the database and media.',
+    next: 'Email delivery is not configured yet: requests and quote PDFs are stored and viewable in the administration, and visitors are told that no email was sent. Outgoing email will be enabled only after real send-and-receive tests.',
+    flow: [{ title: 'Discover', text: 'Browse estates and cuvées in French or English through immersive photography.' }, { title: 'Select', text: 'Choose vintage, format and label, then add bottle quantities to a selection.' }, { title: 'Request', text: 'Submit a commercial request; it is recorded with a reference, not an order.' }, { title: 'Quote', text: 'An internal draft-quote PDF is generated for Wines Horizon from private pricing.' }],
+    ledger: [
+      { capability: 'Bilingual FR/EN catalogue of estates, cuvées and variants', status: 'Live', evidence: 'Served on the Hostinger site behind a visitor access code; captured on October 12, 2026.', href: 'https://coral-owl-986439.hostingersite.com/' },
+      { capability: 'Immersive photographic experience', status: 'Original screenshot', evidence: 'The capture shows the full-screen homepage photography, logo and section navigation after full load.' },
+      { capability: 'Selection and commercial requests', status: 'Live', evidence: 'Visitors build a selection with quantities and submit a request recorded on the server. A request is not an order or an accepted offer.' },
+      { capability: 'Internal draft-quote PDFs', status: 'Live · internal', evidence: 'Generated for Wines Horizon and downloadable only from the authenticated administration. No prices or client data are shown here.' },
+      { capability: 'Administration of content, media and pricing', status: 'Live · internal', evidence: 'Estates, cuvées, variants, pages and media are managed with draft and publish states; pricing stays private.' },
+      { capability: 'Content history and backups', status: 'Live · internal', evidence: 'Every content change is versioned with compare and restore; backups capture the SQLite database and media with integrity checks.' },
+      { capability: 'Email notifications', status: 'Not configured', evidence: 'SMTP is not set up. Requests and PDFs are stored without sending any email, and visitors are told so.' }
+    ]
   }
 ];
 // Test-only scale fixtures. NEXT_PUBLIC_PORTFOLIO_FIXTURES is never set in deployed environments.

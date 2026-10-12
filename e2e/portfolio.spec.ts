@@ -40,7 +40,7 @@ test('reduced motion is static and accessible', async ({page}) => {
 });
 test('all six projects retain real media, links and honest status on the homepage', async ({page}) => {
   await page.goto('/');
-  await expect(page.locator('.project-chapter')).toHaveCount(8);
+  await expect(page.locator('.project-chapter')).toHaveCount(9);
   for (const chapter of await page.locator('.project-chapter').all()) {
     await expect(chapter.locator('.project-status')).not.toBeEmpty();
     await expect(chapter.locator('.work-tile-visual img')).toHaveCount(1);
@@ -87,7 +87,7 @@ test('galaxy renders without console errors and compact layouts stay contained',
   for (const width of [320, 768, 1024]) {
     await page.setViewportSize({width, height:800});
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-    await expect(page.locator('.galaxy-project')).toHaveCount(8);
+    await expect(page.locator('.galaxy-project')).toHaveCount(9);
   }
   expect(errors).toEqual([]);
 });
