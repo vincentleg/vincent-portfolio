@@ -1,5 +1,7 @@
 # Screenshot review — October 8, 2026
 
+CORE addition — October 17, 2026: `public/media/core-home.webp` is an authentic, unedited viewport capture of `https://creationofrebornearth.com` in an isolated Chromium browser at 1440 × 900. Visually verified before publication: CORE / Creation Of Reborn Earth branding, interactive Earth centered on the Americas, public cinematic interface and prototype disclosure. No account, private information or desktop chrome is visible. Converted to WebP at quality 86 (69,168 bytes); no fictional UI, overlays or generated imagery. Existing screenshot derivatives remain unchanged.
+
 All eight supplied PNGs were visually inspected before any derivative was placed in `public/`. Originals and the source strategy document remain local under the ignored `portfolio-starter/` directory. They must not be committed or uploaded.
 
 | Capture time | Product | Decision |

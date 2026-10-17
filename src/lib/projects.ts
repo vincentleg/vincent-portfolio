@@ -12,6 +12,9 @@ export type Project = {
   /** Meaningful connections only; rendered as constellation edges (symmetric). */
   related?: Relation[];
   hook: string; summary: string;
+  fullName?: string; year?: number; flagship?: boolean; longDescription?: string; sourceReview?: string;
+  presentation?: { title: string; text: string }[];
+  layers?: { title: string; text: string }[];
   /** Optional authentic visual. Without one, the project's signature diagram is shown. */
   image?: string; imageAlt?: string; caption?: string;
   gallery: { src: string; alt: string; caption: string }[];
@@ -26,6 +29,46 @@ export type Project = {
 export type NumberedProject = Project & { number: string };
 const github = 'https://github.com/vincentleg';
 const entries: Project[] = [
+  {
+    slug: 'core', name: 'CORE', fullName: 'Creation Of Reborn Earth', year: 2026, flagship: true,
+    group: 'AI products & agents', date: '2026-10', featured: true,
+    category: 'AI Civilization / Collective Intelligence / Scientific Simulation',
+    status: 'Active flagship project / evolving prototype', accent: '#6bd5ed', sourceReview: 'October 17, 2026',
+    hook: 'A parallel Earth. A civilization of intelligence. A future we build together.',
+    summary: "CORE is a long-term project to build a parallel Earth where AI agents and humans collaborate to investigate humanity's challenges, test possible solutions and turn collective intelligence into evidence-based progress.",
+    longDescription: 'Creation Of Reborn Earth (CORE) explores a new model of collective intelligence: an interactive virtual world connecting cities, specialized AI agents, human contributors, scientific investigations and simulations. Its evolving prototype demonstrates agent coordination, evidence-linked urban investigations and bounded scientific experiments. Its larger ambition is to make solving real-world problems a transparent, collaborative and continuously improving process.',
+    image: '/media/core-home.webp', imageAlt: 'Authentic CORE website: Creation Of Reborn Earth branding, interactive Earth centered on the Americas, cinematic blue interface and local prototype disclosure.',
+    caption: 'Authentic live-site capture · creationofrebornearth.com · October 17, 2026. The public experience is a prototype; recorded agent activity and simulations do not demonstrate real-world impact.',
+    gallery: [], links: [{ label: 'Explore CORE', href: 'https://creationofrebornearth.com', kind: 'demo' }, { label: 'GitHub', href: 'https://github.com/vincentleg/core', kind: 'repo' }],
+    stack: ['Interactive 3D Earth', 'MapLibre', 'Evidence provenance', 'Deterministic verification', 'Human review'],
+    problem: 'Humanity’s challenges cross disciplines, institutions and borders. CORE’s long-term entrepreneurial vision is a shared world where people can connect questions to evidence, challenge ideas and contribute to solutions together.',
+    decision: 'Connect an explorable parallel Earth to a transparent process of investigation, simulation, criticism and human review. The world gives context; the evidence and decision process connect an idea to a possible real-world outcome.',
+    approach: 'The public repository documents a 3D Earth, San Francisco navigation, virtual agent profiles and recorded activities, evidence-linked investigations in San Francisco and New York, deterministic decision gateways, bounded scientific laboratory experiments and recorded decision dossiers. Public agent activities replay recordings; some local workflows use model-assisted agents. Independent validation and human authorization remain necessary before real infrastructure changes.',
+    next: 'Build toward an accessible, participatory planetary civilization of collective intelligence. Future work includes expert and community participation, transparent contribution histories, carefully reviewed proposals and independently measured outcomes. Calibration, public participation services and real-world validation remain open work; CORE Genesis remains a future organizational concept.',
+    presentation: [
+      { title: 'Vision', text: 'Build a parallel Earth where human and artificial intelligence collaborate to address real-world challenges. This is my most ambitious, long-term entrepreneurial project: a participatory civilization of collective intelligence, developed through an evolving prototype.' },
+      { title: 'The World', text: 'An explorable virtual environment connects cities, problems, agents and evidence. The prototype offers an interactive 3D Earth, San Francisco navigation and investigation workflows for San Francisco and New York. Planetary-scale participation and scientific coverage remain long-term ambitions.' },
+      { title: 'The Civilization', text: 'Specialized agents, human contributors and expert review are intended to work toward shared goals. Today, virtual agent profiles and recorded activities make bounded investigations inspectable. Public agents replay recorded runs; some local workflows use model assistance. Public participation by individuals, experts and communities is future work.' },
+      { title: 'The Intelligence', text: 'Evidence, scientific investigations, simulation, adversarial criticism and transparent decision processes form the shared intelligence vision. Current workflows link evidence to proposals, preserve dissent and use deterministic verification gateways. Laboratory experiments are bounded; synthetic and historical inputs carry explicit limits.' },
+      { title: 'From Simulation to Reality', text: 'Proposals are evaluated and reviewed before any authorized real-world action. Simulations do not establish proven real-world impact. Real infrastructure changes require independent validation and human authorization; CORE does not execute them. Measured impact remains a future objective where it has not been demonstrated.' },
+      { title: 'The Long-Term Ambition', text: 'An accessible, participatory planetary intelligence where people can contribute ideas and help shape humanity’s future. Transparent contribution histories and carefully reviewed proposals would connect collective effort to measurable progress. This is the wider mission, beyond today’s prototype.' },
+    ],
+    layers: [
+      { title: 'CORE World / Civilization', text: 'Wider vision: an explorable virtual Earth with cities, agents, missions, problems and human participation. The prototype demonstrates selected city and agent experiences; a global participatory civilization remains an ambition.' },
+      { title: 'CORE Intelligence / Knowledge', text: 'Wider vision: shared intelligence organizing evidence, investigations, agent collaboration, provenance and reviewed knowledge. Current bounded investigations and verification gateways provide an early foundation.' },
+      { title: 'CORE Business', text: 'Future professional layer intended to help authorized organizations study and address real-world infrastructure and operational challenges. Prototype workflows do not establish deployed customer solutions or field outcomes.' },
+      { title: 'CORE Genesis', text: 'Future organizational concept for coordinating CORE’s development and evolution. It is not a deployed autonomous company or product.' },
+    ],
+    flow: [{ title: 'Investigate', text: 'Define a bounded question and connect it to dated, traceable evidence.' }, { title: 'Challenge', text: 'Compare simulated alternatives, preserve dissent and test assumptions.' }, { title: 'Verify', text: 'Recompute the dossier through deterministic gateways and expose limits.' }, { title: 'Review', text: 'Require independent validation and human authorization before any real-world action.' }],
+    ledger: [
+      { capability: 'Interactive Earth and city investigations', status: 'Evolving prototype', evidence: 'The public repository documents 3D Earth navigation, San Francisco experiences and San Francisco / New York investigation workflows; this does not establish planetary scientific coverage.', href: 'https://github.com/vincentleg/core/blob/main/README.md' },
+      { capability: 'Virtual agent civilization', status: 'Public recordings / bounded local workflows', evidence: 'Agent profiles and activities are inspectable. Public agents replay recordings without live model execution. Some local workflows use model-assisted agents; the public site is not a fully autonomous live AI civilization.', href: 'https://github.com/vincentleg/core/blob/main/README.md' },
+      { capability: 'Scientific experiments and decision dossiers', status: 'Bounded prototype', evidence: 'The laboratory compares baselines and variants, retains dissent and verifies results by recalculation. Synthetic traffic and sourced historical energy exercises are not calibrated field outcomes.', href: 'https://github.com/vincentleg/core/blob/main/PROJECT_STATE.md' },
+      { capability: 'Real-world authorization and impact', status: 'Human review required / impact not established', evidence: 'Deterministic gateways check proposals; independent validation and human authorization are required for real infrastructure changes. No autonomous infrastructure control or proven real-world impact is claimed.', href: 'https://github.com/vincentleg/core/blob/main/docs/CONSTITUTION_V1.md' },
+      { capability: 'Participation, Business and Genesis', status: 'Long-term vision', evidence: 'Public participation, professional organizational workflows and Genesis are wider ambitions. The local synthetic contribution foundation does not establish public accounts, community adoption or a deployed autonomous company.', href: 'https://github.com/vincentleg/core/blob/main/docs/product/CORE_AVATAR_VISION.md' },
+    ],
+    copy: { problemTitle: ['A shared world.', 'A shared challenge.'], approachLabel: 'THE FOUNDING VISION', approachTitle: ['Collective intelligence.', 'Accountable progress.'], methodTitle: 'The current prototype', stackLabel: 'PROTOTYPE FOUNDATIONS', workflowTitle: 'A parallel Earth. A shared future.', nextTitle: ['A planetary ambition.', 'Built together.'] },
+  },
   {
     slug: 'red-queen', name: 'RED QUEEN', group: 'AI products & agents', date: '2026-10', featured: true, related: [{ slug: 'escape-room', reason: 'Recovery that has to prove itself' }],
     category: 'AI Agents / Harness Engineering', status: 'Live demo · hackathon prototype', accent: '#d65468',

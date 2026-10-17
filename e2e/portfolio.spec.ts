@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-const routes = ['/', '/work', '/work/red-queen', '/work/plot-twist', '/work/orqo', '/work/escape-room', '/work/intent-firewall', '/work/handshake', '/work/steward', '/work/notebook-from-the-valley', '/about'];
+const routes = ['/', '/work', '/work/core', '/work/wines-horizon', '/work/red-queen', '/work/plot-twist', '/work/orqo', '/work/escape-room', '/work/intent-firewall', '/work/handshake', '/work/steward', '/work/notebook-from-the-valley', '/about'];
 test('all routes, real media, metadata, and responsive containment', async ({page}) => {
   const errors:string[] = []; page.on('pageerror',error => errors.push(error.message));
   for (const route of routes) {
@@ -38,14 +38,14 @@ test('reduced motion is static and accessible', async ({page}) => {
     await page.goto(route); const results = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze(); expect(results.violations).toEqual([]);
   }
 });
-test('all six projects retain real media, links and honest status on the homepage', async ({page}) => {
+test('all projects retain real media, links and honest status on the homepage', async ({page}) => {
   await page.goto('/');
-  await expect(page.locator('.project-chapter')).toHaveCount(9);
+  await expect(page.locator('.project-chapter')).toHaveCount(10);
   for (const chapter of await page.locator('.project-chapter').all()) {
     await expect(chapter.locator('.project-status')).not.toBeEmpty();
     await expect(chapter.locator('.work-tile-visual img')).toHaveCount(1);
     for (const link of await chapter.locator('.chapter-links a').all()) expect(await link.getAttribute('href')).toMatch(/^https:\/\//);
-    await chapter.locator('summary').click(); await expect(chapter.locator('.chapter-ledger')).toBeVisible();
+    await chapter.locator('summary').click(); await expect(chapter.locator('.chapter-ledger').last()).toBeVisible();
   }
   await expect(page.locator('#project-notebook-from-the-valley')).toContainText('Live publication');
   await page.goto('/work/notebook-from-the-valley'); await expect(page.getByRole('heading',{level:1})).toHaveText('Notebook from the Valley');
@@ -87,7 +87,7 @@ test('galaxy renders without console errors and compact layouts stay contained',
   for (const width of [320, 768, 1024]) {
     await page.setViewportSize({width, height:800});
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-    await expect(page.locator('.galaxy-project')).toHaveCount(9);
+    await expect(page.locator('.galaxy-project')).toHaveCount(10);
   }
   expect(errors).toEqual([]);
 });

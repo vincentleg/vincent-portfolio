@@ -1,0 +1,52 @@
+import { test, expect } from '@playwright/test';
+
+test('CORE is the flagship with authentic media, accurate scope and direct live links', async ({ page, context, isMobile }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Pause orbit' }).click();
+  await page.mouse.move(0, 0);
+  await page.locator('.galaxy-viewport').scrollIntoViewIfNeeded();
+  const node = page.locator('.galaxy-project').first();
+  await expect(node).toHaveAttribute('aria-label', 'CORE');
+  await expect(node).toHaveClass(/galaxy-flagship/);
+  const viewport = (await page.locator('.galaxy-viewport').boundingBox())!;
+  const planet = (await node.locator('.planet').boundingBox())!;
+  const portrait = (await page.locator('.portrait-mask').boundingBox())!;
+  expect(planet.x).toBeGreaterThanOrEqual(viewport.x);
+  expect(planet.y).toBeGreaterThanOrEqual(viewport.y);
+  expect(planet.x + planet.width).toBeLessThanOrEqual(viewport.x + viewport.width);
+  expect(planet.y + planet.height).toBeLessThanOrEqual(viewport.y + viewport.height);
+  expect(planet.x < portrait.x + portrait.width && planet.x + planet.width > portrait.x && planet.y < portrait.y + portrait.height && planet.y + planet.height > portrait.y).toBeFalsy();
+  expect(planet.width).toBeGreaterThan((await page.locator('.galaxy-project').nth(1).locator('.planet').boundingBox())!.width);
+  await node.focus();
+  const preview = page.locator('.galaxy-preview');
+  await expect(preview).toHaveCSS('transform', /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
+  await expect(preview.locator('img')).toHaveAttribute('src', /core-home/);
+  await expect(preview).toContainText('A parallel Earth. A civilization of intelligence. A future we build together.');
+  const liveLink = preview.getByRole('link', { name: /View project/ });
+  await expect(liveLink).toHaveAttribute('href', 'https://creationofrebornearth.com');
+  await expect(liveLink).toHaveAttribute('target', '_blank');
+  await page.screenshot({ path: `/tmp/core-portfolio-${isMobile ? 'mobile' : 'desktop'}-preview.png` });
+  await context.route('https://creationofrebornearth.com/**', route => route.fulfill({ body: 'CORE destination verified' }));
+  const popupPromise = context.waitForEvent('page');
+  await liveLink.click();
+  const popup = await popupPromise;
+  await popup.waitForLoadState();
+  expect(popup.url()).toBe('https://creationofrebornearth.com/');
+  await popup.close();
+  const rows = page.locator('.pindex-row');
+  await expect(rows.first()).toHaveAttribute('href', 'https://creationofrebornearth.com');
+  await expect(rows.first()).toHaveAttribute('target', '_blank');
+  await expect(rows.locator('.pindex-name')).toHaveText(['COREFlagship Project', 'RED QUEEN', 'PLOT TWIST', 'ESCAPE ROOM', 'ORQO', 'Intent Firewall', 'Handshake', 'Steward', 'Notebook from the Valley', 'Wines Horizon']);
+  await expect(page.locator('.project-chapter').first()).toHaveAttribute('id', 'project-core');
+  await page.locator('#project-core summary').click();
+  for (const title of ['Vision', 'The World', 'The Civilization', 'The Intelligence', 'From Simulation to Reality', 'The Long-Term Ambition']) {
+    await expect(page.locator('#project-core').getByRole('heading', { name: title, exact: true })).toBeVisible();
+  }
+  await expect(page.locator('#project-core')).toContainText('Public agents replay recorded runs');
+  await expect(page.locator('#project-core')).toContainText('It is not a deployed autonomous company or product.');
+  await page.goto('/work/core');
+  await expect(page.getByRole('heading', { name: 'CORE', exact: true })).toBeVisible();
+  await expect(page.locator('.case-stage img')).toHaveAttribute('src', /core-home/);
+  await expect(page.getByRole('link', { name: 'Explore CORE' })).toHaveAttribute('href', 'https://creationofrebornearth.com');
+  await expect(page.locator('.case-links').getByRole('link', { name: /GitHub/ })).toHaveAttribute('href', 'https://github.com/vincentleg/core');
+});

@@ -13,6 +13,15 @@ The product repositories' test suites were not run. “Reported working” and �
 
 Each case study has a Verification Ledger in `src/lib/projects.ts`; preserve these evidence distinctions when updating copy. Project names, status, media, links, workflow and ledgers are data-driven. The constellation computes its node positions from that same array, so adding a project does not require adding a hard-coded node.
 
+## CORE (added October 17, 2026)
+
+- Read-only review of the public `vincentleg/core` main branch: `README.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `docs/CONSTITUTION_V1.md`, `docs/PRODUCT_VISION.md`, `docs/ARCHITECTURE.md` and `docs/product/CORE_AVATAR_VISION.md`. The architecture document describes historical layers; the current state and README establish the later laboratory and investigation capabilities.
+- The founder's supplied wider vision defines the World / Civilization, Intelligence / Knowledge, Business and Genesis presentation. These layers are explicitly presented as the wider vision. Genesis is a future organizational concept, not a deployed company.
+- Public agent activity is recorded replay. Some local workflows use model-assisted agents. The presentation claims neither live autonomous public execution nor scientifically validated field impact. Independent validation and human authorization remain prerequisites for real-world infrastructure changes.
+- `https://creationofrebornearth.com` was inspected in an isolated browser and visually verified as CORE, with its branding, interactive Earth, cinematic interface and local-prototype disclosure. It was used directly for the screenshot and live actions. No fallback deployment or generated interface was needed.
+- No CORE repository files were changed, no private datasets were copied and no CORE workflows or infrastructure actions were executed.
+- The checkout already contained Wines Horizon, in addition to the eight projects listed in the V9 brief. It is preserved after those projects: CORE is first, then the requested eight, then Wines Horizon. This yields 10 real planets and 11 future placeholders, retaining 21 total. The original eight keep their inner-ring positions; CORE has its own visible orbit. Wines Horizon's pre-existing URLs returned HTTP 401 (site) and 404 (public GitHub); they were preserved rather than substituted.
+
 ## Notebook from the Valley (added October 8, 2026)
 
 - Official URL verified: https://notebookfromthevalley.com (HTTP 200; WordPress author account belongs to Vincent Leguide; founding essay written in the first person).

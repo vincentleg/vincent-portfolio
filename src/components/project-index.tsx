@@ -18,7 +18,7 @@ export function ProjectIndex({ items, total }: { items: NumberedProject[]; total
         {items.map((p, i) => { const dest = projectDestination(p); return <li key={p.slug} style={{ '--project-accent': p.accent } as React.CSSProperties}>
           <Link href={dest?.href ?? `#project-${p.slug}`} {...dest && { target: '_blank', rel: 'noopener noreferrer', 'aria-label': `${p.name}: ${dest.label} (opens in a new tab)`, title: dest.label }} className={`pindex-row ${i === active ? 'on' : ''}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)}>
             <span className="pindex-num">{p.number}</span>
-            <span className="pindex-main"><span className="pindex-name">{p.name}</span><span className="pindex-hook">{p.hook}</span></span>
+            <span className="pindex-main"><span className="pindex-name">{p.name}{p.flagship && <small className="flagship-label">Flagship Project</small>}</span><span className="pindex-hook">{p.hook}</span></span>
             <span className="pindex-cat">{p.category}<small>{p.status}</small></span>
             <span className="pindex-thumb" aria-hidden="true"><ProjectVisual project={p} sizes="90vw"/></span>
             <span className="pindex-go" aria-hidden="true">↗</span>

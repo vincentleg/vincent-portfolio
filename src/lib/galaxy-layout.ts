@@ -1,5 +1,5 @@
 // Slots beyond the six original projects are visual space for future work.
-// Each real project beyond six retires the next slot; the first eight share the visible inner ring.
+// Each real project beyond six retires the next slot; CORE and the eight original projects stay visible.
 export const outerOrbits = [
   { x: 78, y: 70, count: 3, phase: 9, seconds: 310 },
   { x: 102, y: 92, count: 4, phase: 21, seconds: 370 },
@@ -17,7 +17,8 @@ export const futurePlanetSlots = outerOrbits.flatMap((orbit, ring) =>
 );
 const innerRingCount = 8;
 export function projectOrbit(index: number) {
-  if (index < innerRingCount) return { phase: 6 + index * 100 / innerRingCount, seconds: 233 };
+  if (index === 0) return { x: 30, y: 37, phase: 75, seconds: 291 };
+  if (index <= innerRingCount) return { phase: 6 + (index - 1) * 100 / innerRingCount, seconds: 233 };
   return futurePlanetSlots[index - 6] ?? {
     x: 178 + Math.floor((index - 21) / 6) * 25,
     y: 166 + Math.floor((index - 21) / 6) * 25,

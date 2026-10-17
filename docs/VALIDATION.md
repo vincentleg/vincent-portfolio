@@ -1,5 +1,16 @@
 # First-version validation
 
+## CORE V9 integration — October 17, 2026
+
+- `npm run build`, `npm run typecheck` and `git diff --check`: passed.
+- `npx playwright test e2e/core.spec.ts e2e/galaxy-v7.spec.ts e2e/portfolio.spec.ts`: 23 passed, 1 intentionally skipped mobile mouse-hover test. Covers all ten project routes and media, responsive containment, CORE first in Selected Work and project navigation, direct new-tab CORE activation, six presentation sections, honest prototype scope, larger visible planet without portrait overlap, layered previews, 25–150% zoom, all 21 planets contained at minimum zoom, portrait/LinkedIn preservation, WebGL/pause/fallback, reduced motion, metadata and axe accessibility.
+- Visually reviewed the authentic CORE source capture and desktop/mobile portfolio previews. Corrected the initially clipped mobile CORE orbit. CORE screenshot is 69,168 bytes, with no new dependencies.
+- Public URL check: CORE and all eight projects specified in the brief returned HTTP 200 for their existing destinations. Additional pre-existing Wines Horizon URLs returned 401 (site) and 404 (GitHub); preserved as authored. External product workflows were not executed.
+- Catalogue discrepancy: the starting checkout already had nine real projects. Preserving Wines Horizon yields 10 real projects + 11 placeholders = 21 planets. CORE is first, followed by the eight requested projects and Wines Horizon.
+- CORE repository reviewed read-only. Raw local screenshots remain untracked and are excluded by the existing `.vercelignore` rule.
+
+Historical validation follows.
+
 October 8, 2026.
 
 - Production Next.js build: passed; all seven requested content pages generated.
