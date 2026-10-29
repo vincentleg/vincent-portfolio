@@ -48,5 +48,5 @@ test('CORE is the flagship with authentic media, accurate scope and direct live 
   await expect(page.getByRole('heading', { name: 'CORE', exact: true })).toBeVisible();
   await expect(page.locator('.case-stage img')).toHaveAttribute('src', /core-home/);
   await expect(page.getByRole('link', { name: 'Explore CORE' })).toHaveAttribute('href', 'https://creationofrebornearth.com');
-  await expect(page.locator('.case-links').getByRole('link', { name: /GitHub/ })).toHaveAttribute('href', 'https://github.com/vincentleg/core');
+  await expect(page.locator('.case-links').getByRole('link', { name: /manifesto/ })).toHaveAttribute('href', 'https://creationofrebornearth.com/manifesto.html');
 });
